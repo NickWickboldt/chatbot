@@ -1,7 +1,8 @@
 import requests
+from auth_id import auth_id
 
 API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v3"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": "Bearer " + auth_id}
 
 def query_audio_to_text(filename = './audio/user_audio_in.wav'):
     with open(filename, "rb") as f:

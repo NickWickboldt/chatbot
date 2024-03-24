@@ -1,11 +1,12 @@
 import requests
 import os
 from IPython.display import Audio
+from auth_id import auth_id
 
 
 # API_URL = "https://api-inference.huggingface.co/models/suno/bark-small"
 API_URL = "https://api-inference.huggingface.co/models/facebook/mms-tts-eng"
-headers = {"Authorization": "Bearer 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"}
+headers = {"Authorization": "Bearer " + auth_id}
 
 def query_text_to_audio(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
