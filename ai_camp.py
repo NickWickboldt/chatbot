@@ -2,46 +2,44 @@ import pyaudio
 import wave
 from PIL import Image, ImageTk
 import tkinter as tk
+import threading
 
-def record_audio(event=None):
-    event.widget.configure(bg="#FF0000")
-    # Define audio recording parameters
-    FORMAT = pyaudio.paInt16  # Sample size and format
-    CHANNELS = 1  # Number of audio channels (1 for mono, 2 for stereo)
-    RATE = 44100  # Sample rate (samples per second)
-    CHUNK = 1024  # Number of frames per buffer
-
-    # Initialize PyAudio
-    audio = pyaudio.PyAudio()
-
-    # Open audio stream for recording
-    stream = audio.open(format=FORMAT, channels=CHANNELS,
+mic_toggle = False
+FORMAT = pyaudio.paInt16  # Sample size and format
+CHANNELS = 1  # Number of audio channels (1 for mono, 2 for stereo)
+RATE = 44100  # Sample rate (samples per second)
+CHUNK = 1024  # Number of frames per buffer
+audio = pyaudio.PyAudio()
+stream = audio.open(format=FORMAT, channels=CHANNELS,
                     rate=RATE, input=True,
                     frames_per_buffer=CHUNK)
+output_file = None
 
-    print("Recording...")
+def record_audio(event=None):
+    global mic_toggle, FORMAT, CHANNELS, RATE, CHUNK, stream, output_file
 
-    # Create a WAV file for writing
-    output_file = wave.open("./audio/user_audio_in.wav", "wb")
-    output_file.setnchannels(CHANNELS)
-    output_file.setsampwidth(audio.get_sample_size(FORMAT))
-    output_file.setframerate(RATE)
+    if not mic_toggle:
+        mic_toggle = True
+        output_file = wave.open("./audio/user_audio_in.wav", "wb")
+        output_file.setnchannels(CHANNELS)
+        output_file.setsampwidth(audio.get_sample_size(FORMAT))
+        output_file.setframerate(RATE)
+        print("Recording...")
 
-    # Record audio data in chunks and write to file
-    frames = []
-    for _ in range(int(RATE / CHUNK * 5)):  # Record for 5 seconds
-        data = stream.read(CHUNK)
-        frames.append(data)
-        output_file.writeframes(data)
+        def record():
+            while mic_toggle:
+                data = stream.read(CHUNK)
+                output_file.writeframes(data)
 
-    print("Recording finished.")
+        threading.Thread(target=record).start()
 
-    # Close the audio stream and file
-    stream.stop_stream()
-    stream.close()
-    audio.terminate()
-    output_file.close()
-    event.widget.configure(bg="#DC8686")
+    else:
+        mic_toggle = False  # Stop recording
+        print("Recording finished.")
+        stream.stop_stream()  # Stop the audio stream
+        stream.close()  # Close the audio stream
+        audio.terminate()  # Terminate the audio interface
+        output_file.close()  # Close the output wave file
 
 def remove_periods_and_commas(input_string):
     # Use a generator expression to filter out periods and commas
