@@ -202,8 +202,8 @@ body{
 /* Image Generator */
 
 .image-frame{
-    width: 600px;
-    height: 600px;
+    width: 550px;
+    height: 550px;
     background-color: var(--smokeLavender);
     padding: 4px;
     border: var(--smokeLavender) 1px solid;
@@ -256,4 +256,41 @@ body{
     background-color: var(--smokeWhite);
     color: var(--darkGrey);
     transition: all .3s ease-in-out;
+}
+
+.display-frame{
+    position: absolute;
+    background-color: var(--smokeWhite);
+    width: 400px;
+    height: 300px;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.display-frame h1{
+    padding: 8px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.slide-out{
+    transition: all .4s ease-in-out;
+    top: 30%;
+    left: 70%;
+}
+
+.slide-in{
+    transition: all .4s ease-in-out;
+    top: 30%;
+    left: 120%;
+}
+
+/* Text Generation */
+
+.chat-box-frame{
+    background-color: var(--smokeLavender);
+    width: 100%;
+    height: 450px;
+    margin-bottom: 30px;
+    border-radius: 20px;
 }
