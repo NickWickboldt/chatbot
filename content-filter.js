@@ -37,7 +37,8 @@ function checkOtherContent(textInput){
     "changing clothes",
     "kissing",
     "clothingless",
-    "making out"
+    "making out",
+    "revealing"
   ]
 
   for(const item of possibilities){

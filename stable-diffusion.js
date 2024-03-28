@@ -3,6 +3,7 @@ import {contentFilterText} from "./content-filter.js";
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry"); 
+const mainContainer = document.querySelector(".main-container")
 
 async function query(data) {
 	const response = await fetch(
@@ -52,4 +53,12 @@ async function submitClicked(){
 			entry.placeholder = "There has been an error."; 
 		}
 	}
+}
+
+function display_input(input){
+	const displayDiv = document.createElement('div');
+
+	displayDiv.textContent = input;
+
+	document.mainContainer.appendChild(displayDiv);
 }
