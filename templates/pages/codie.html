@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codie</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-header">
+            <img src="{{ url_for('static', filename='asset/icode-logo.png') }}" class="logo" alt="logo">
+            <h1 class="title">iCode</h1>
+        </div>     
+        <div class="links-container">
+            <a href="{{ url_for('index') }}" class="link">Home</a>
+            <a href="{{ url_for('imgGen') }}" class="link">Image Generator</a>
+            <a href="{{ url_for('textGen') }}" class="link">Text Generation</a>
+            <a href="{{ url_for('codie') }}" class="link">Codie</a>
+        </div>
+    </nav>
+
+    <section class="footer-section">
+        <div class="footer-links-container">
+            <a href="{{ url_for('index') }}" class="footer-link">Home</a>
+            <a href="{{ url_for('imgGen') }}" class="footer-link">Image Generator</a>
+            <a href="{{ url_for('textGen') }}" class="footer-link">Text Generation</a>
+            <a href="{{ url_for('codie') }}" class="footer-link">Codie</a>
+        </div>
+        <h5>© iCode Corporate 2024</h5>
+    </section>
+</body>
+</html>
