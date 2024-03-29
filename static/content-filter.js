@@ -38,7 +38,10 @@ function checkOtherContent(textInput){
     "kissing",
     "clothingless",
     "making out",
-    "revealing"
+    "revealing",
+    "shower",
+    "bath",
+    "pee"
   ]
 
   for(const item of possibilities){
@@ -47,4 +50,23 @@ function checkOtherContent(textInput){
     }
   }
   return 1; 
+}
+
+export async function contentFilterImage(blobURL){
+  let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
+    params: {
+      'url': blobURL,
+      'workflow': 'wfl_fYMYmqaTT4Hcbfo8SKWRi',
+      'api_user': '1820253693',
+      'api_secret': 'Yc42azkarSBjGDhqiAHkZNEojyQfB7tm',
+    }
+  })
+  console.log(response); 
+  // const anchor = document.createElement('a');
+  // anchor.style.display = 'none'; 
+  // anchor.href = blobURL;
+  // anchor.download = 'image.jpg';
+  // document.body.appendChild(anchor);
+  // anchor.click();
+  // document.body.removeChild(anchor);
 }
