@@ -1,4 +1,4 @@
-import {contentFilterText} from "./content-filter.js";
+import {contentFilterText, contentFilterImage} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
@@ -42,6 +42,7 @@ async function submitClicked(){
 			img.classList.remove('image-frame-loading'); 
 			img.classList.add('image-frame-image'); 
 			img.src = URL.createObjectURL(response); 
+			contentFilterImage(img.src); 
 		});
 		entry.value = "";
 		entry.placeholder = "Type something in..."
