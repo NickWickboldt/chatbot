@@ -1,18 +1,13 @@
 from flask import Flask, render_template
 
-
 app = Flask(__name__)
 
 @app.route('/')
-
 def index():
     return render_template('index.html')
 
 @app.route('/pages/imgGen')
 def imgGen():
-
-
-
     return render_template('/pages/imgGen.html')
 
 @app.route('/pages/textGen')

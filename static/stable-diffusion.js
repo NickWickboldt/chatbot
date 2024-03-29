@@ -65,10 +65,3 @@ function display_input(input){
 	inputText.textContent = "You typed: " + input;
 	displayDiv.appendChild(inputText);
 }
-
-function convertBlob(blob, filename){
-	blob.lastModifiedDate = new Date();
-	blob.name = filename;
-
-	console.log(blob);
-} 
