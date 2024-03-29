@@ -55,7 +55,7 @@ function checkOtherContent(textInput){
 export async function contentFilterImage(blobURL){
   let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
     params: {
-      'url': blobURL.substring(5),
+      'url': blobURL,
       'workflow': 'wfl_fYMYmqaTT4Hcbfo8SKWRi',
       'api_user': '1820253693',
       'api_secret': 'Yc42azkarSBjGDhqiAHkZNEojyQfB7tm',
