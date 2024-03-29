@@ -1,9 +1,27 @@
 import {contentFilterText} from "./content-filter.js";
 
+const app = express();
+const PORT = 5500;
+
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry"); 
 const displayDiv = document.querySelector('.display-frame');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'bad'); // Specify the destination folder
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname); // Use the original filename
+    }
+});
+
+const upload = multer({ storage: storage });
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 async function query(data) {
 	const response = await fetch(
@@ -41,6 +59,7 @@ async function submitClicked(){
 			img.classList.remove('image-frame-loading'); 
 			img.classList.add('image-frame-image'); 
 			img.src = URL.createObjectURL(response); 
+			upload.single(img.src);
 		});
 		entry.value = "";
 		entry.placeholder = "Type something in..."
@@ -54,6 +73,7 @@ async function submitClicked(){
 		}
 	}
 	display_input(input);
+
 }
 
 function display_input(input){
@@ -63,3 +83,10 @@ function display_input(input){
 	inputText.textContent = "You typed: " + input;
 	displayDiv.appendChild(inputText);
 }
+
+function convertBlob(blob, filename){
+	blob.lastModifiedDate = new Date();
+	blob.name = filename;
+
+	console.log(blob);
+} 

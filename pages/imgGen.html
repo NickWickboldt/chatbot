@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iCode: Image Generator</title>
     <link rel="stylesheet" href="/styles.css">
     <script type="module" src="/stable-diffusion.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/express/4.17.1/express.min.js" defer></script>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo-header">
             <img src="/asset/icode-logo.png" class="logo" alt="">
             <h1 class="title">iCode</h1>
-        </div>     
+        </div>
         <div class="links-container">
             <a href="/index.html" class="link">Home</a>
             <a href="imgGen.html" class="link">Image Generator</a>
@@ -29,9 +32,9 @@
             <div class="input-container">
                 <input class="image-gen-entry" type="text" placeholder="Type something in...">
                 <button class="submit-btn">Submit</button>
-            </div>             
+            </div>
         </div>
-        <div class="display-frame slide-in"></div>    
+        <div class="display-frame slide-in"></div>
     </section>
 
     <section class="footer-section">
@@ -44,5 +47,9 @@
     </section>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/formdata-polyfill/formdata.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/multer/1.4.3/multer.min.js"></script>
+    
 </body>
+
 </html>
