@@ -51,7 +51,7 @@ a {
     width: 100%;
 }
 
-.tilte{
+.tilte {
     font-size: 3vmin;
     margin-top: 4px;
 }
@@ -244,7 +244,7 @@ a {
     flex-direction: column;
 }
 
-.prompt-input{
+.prompt-input {
     font-size: 2vmin;
     color: var(--darkBlackGrey);
 }
@@ -262,7 +262,7 @@ a {
 .input-container {
     margin: 12px;
     display: flex;
-    align-items: center;    
+    align-items: center;
     justify-content: space-between;
     width: 65vmin;
 }
@@ -274,13 +274,14 @@ a {
     padding: 4px;
     font-size: 2vmin;
     color: var(--darkBlackGrey);
-    border: 2px solid transparent; 
+    border: 2px solid transparent;
     border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
-    border-image-slice: 1; 
+    border-image-slice: 1;
     outline: none;
 }
 
-.input-container button {
+.submit-btn,
+.download-btn {
     width: 12vmin;
     height: 5vmin;
     border-radius: 10px;
@@ -289,6 +290,11 @@ a {
     background: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     color: var(--lightGrey);
     border: 1px var(--smokeWhite) solid;
+}
+
+.download-btn {
+    width: 5vmin;
+    height: 5vmin;
 }
 
 .input-container button:hover {
@@ -308,6 +314,4 @@ a {
 
 /* Screen Size */
 
-@media screen and (min-width: 430px) {
-    
-}
+@media screen and (min-width: 430px) {}
