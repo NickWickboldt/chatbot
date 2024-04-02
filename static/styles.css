@@ -48,6 +48,12 @@ a {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
         rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
     z-index: 1;
+    width: 100%;
+}
+
+.tilte{
+    font-size: 3vmin;
+    margin-top: 4px;
 }
 
 .logo-header {
@@ -55,12 +61,8 @@ a {
     align-items: center;
 }
 
-.logo-header h1 {
-    margin-top: 4px;
-}
-
 .logo {
-    width: 30px;
+    width: 4vmin;
     border-radius: 50%;
     margin-left: 20px;
     margin-right: 8px;
@@ -73,7 +75,7 @@ a {
 .link {
     margin: 4px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 2vmin;
     color: var(--darkBlackGrey);
     padding: 8px;
     border-radius: 5px;
@@ -97,10 +99,11 @@ a {
     box-shadow: var(--darkGrey) 0px 2px 5px -1px, var(--darkBlackGrey) 0px 1px 5px -1px;
     z-index: 1;
     transition: all .4s ease-in-out;
+    width: 100%;
 }
 
 .footer-link {
-    font-size: 18px;
+    font-size: 2vmin;
     color: var(--darkBlackGrey);
     padding: 8px;
     margin: 12px;
@@ -131,15 +134,15 @@ a {
 }
 
 .home-title h1 {
-    font-size: 48px;
+    font-size: 6vmin;
 }
 
 .home-title p {
-    font-size: 24px;
+    font-size: 3vmin;
 }
 
 .project {
-    width: 800px;
+    width: 90vmin;
     height: 300px;
     border-radius: 20px;
     box-shadow: 0 5px 5px var(--smokeWhite);
@@ -161,7 +164,7 @@ a {
     background-color: var(--darkBlackGrey);
     opacity: .5;
     height: 300px;
-    width: 800px;
+    width: 90vmin;
     border-radius: 20px;
     display: none;
 }
@@ -175,19 +178,19 @@ a {
 }
 
 .slide-up h1 {
-    font-size: 32px;
+    font-size: 3vmin;
     margin-bottom: 8px;
     color: var(--smokeWhite);
 }
 
 .slide-up p {
-    font-size: 20px;
+    font-size: 2vmin;
     margin-bottom: 12px;
     color: var(--smokeWhite);
 }
 
 .slide-up a {
-    font-size: 24px;
+    font-size: 2vmin;
     padding: 4px 12px 4px 12px;
     color: var(--lightGrey);
     text-decoration: none;
@@ -195,10 +198,11 @@ a {
     border-radius: 10px;
     text-align: center;
     transition: all .2s ease-in-out;
+    min-width: 5vmin;
 }
 
 .slide-up a:hover {
-    font-size: 26px;
+    font-size: 3vmin;
 }
 
 .bg-img1 {
@@ -228,8 +232,8 @@ a {
 /* Image Generator */
 
 .image-frame {
-    width: 550px;
-    height: 600px;
+    width: 65vmin;
+    height: 65vmin;
     padding: 20px;
     border: var(--darkBlackGrey) 1px solid;
     border-radius: 4px;
@@ -241,7 +245,7 @@ a {
 }
 
 .prompt-input{
-    font-size: 20px;
+    font-size: 2vmin;
     color: var(--darkBlackGrey);
 }
 
@@ -258,17 +262,17 @@ a {
 .input-container {
     margin: 12px;
     display: flex;
-    align-items: center;
+    align-items: center;    
     justify-content: space-between;
-    width: 600px;
+    width: 65vmin;
 }
 
 .input-container input {
-    width: 480px;
-    height: 50px;
+    width: 50vmin;
+    height: 5vmin;
     border-radius: 10px;
     padding: 4px;
-    font-size: 20px;
+    font-size: 2vmin;
     color: var(--darkBlackGrey);
     border: 2px solid transparent; 
     border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
@@ -277,11 +281,11 @@ a {
 }
 
 .input-container button {
-    width: 100px;
-    height: 50px;
+    width: 12vmin;
+    height: 5vmin;
     border-radius: 10px;
     padding: 4px;
-    font-size: 20px;
+    font-size: 2vmin;
     background: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     color: var(--lightGrey);
     border: 1px var(--smokeWhite) solid;
@@ -290,35 +294,6 @@ a {
 .input-container button:hover {
     scale: 1.1;
     transition: all .3s ease-in-out;
-}
-
-.display-frame {
-    position: absolute;
-    background-color: var(--darkBlackGrey);
-    width: 400px;
-    height: 500px;
-    border-radius: 20px;
-    overflow: hidden;
-    top: 25%;
-    left: 70%;
-}
-
-.display-frame h1 {
-    padding: 8px;
-    font-size: 24px;
-    text-align: center;
-    color: var(--smokeWhite);
-
-}
-
-.slide-out {
-    transition: all .4s ease-in-out;
-    opacity: 1;
-}
-
-.slide-in {
-    transition: all .4s ease-in-out;
-    opacity: 0;
 }
 
 /* Text Generation */
@@ -330,8 +305,6 @@ a {
     margin-bottom: 30px;
     border-radius: 20px;
 }
-
-
 
 /* Screen Size */
 
