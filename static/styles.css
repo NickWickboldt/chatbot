@@ -229,19 +229,25 @@ a {
 
 .image-frame {
     width: 550px;
-    height: 550px;
-    padding: 4px;
+    height: 600px;
+    padding: 20px;
     border: var(--darkBlackGrey) 1px solid;
     border-radius: 4px;
     margin: 12px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
+    flex-direction: column;
+}
+
+.prompt-input{
+    font-size: 20px;
+    color: var(--darkBlackGrey);
 }
 
 .image-frame-image {
-    width: 90%;
-    height: 90%;
+    width: 85%;
+    height: 85%;
 }
 
 .image-frame-loading {
@@ -323,4 +329,12 @@ a {
     height: 450px;
     margin-bottom: 30px;
     border-radius: 20px;
+}
+
+
+
+/* Screen Size */
+
+@media screen and (min-width: 430px) {
+    
 }

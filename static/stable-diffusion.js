@@ -3,8 +3,6 @@ import {contentFilterText, filterImage, toBase64, uploadFile} from "./content-fi
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry"); 
-const displayDiv = document.querySelector('.display-frame');
-
 
 async function query(data) {
 	const response = await fetch(
@@ -62,9 +60,7 @@ async function submitClicked(){
 }
 
 function display_input(input){
-	displayDiv.classList.remove('slide-in');
-	displayDiv.classList.add('slide-out');
-	const inputText = document.createElement('h1');
-	inputText.textContent = "You typed: " + input;
-	displayDiv.appendChild(inputText);
+	const displayH1 = document.createElement('h1');
+	displayH1.textContent = input;
+	imageFrame.appendChild(displayH1);
 }
