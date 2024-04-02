@@ -2,7 +2,8 @@ import {contentFilterText, filterImage, toBase64, uploadFile} from "./content-fi
 
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
-const entry = document.querySelector(".image-gen-entry"); 
+const entry = document.querySelector(".image-gen-entry");
+const displayH1 = document.createElement('h1'); 
 
 async function query(data) {
 	const response = await fetch(
@@ -60,8 +61,6 @@ async function submitClicked(){
 }
 
 function display_input(input){
-	const displayH1 = document.createElement('h1');
-	displayH1.textContent = "";
 	displayH1.textContent = input;
 	imageFrame.appendChild(displayH1);
 }
