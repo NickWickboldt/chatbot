@@ -1,3 +1,5 @@
+const cloudinaryCloudname = "dmm8zr0az"
+
 export async function contentFilterText(textInput){
   let data = new FormData();
   data.append('text', textInput);
@@ -17,8 +19,7 @@ export async function contentFilterText(textInput){
     if (response.data.profanity.matches.length > 0) {
         return 0; // profanity
     } else {
-        let secondaryCheck = checkOtherContent(textInput); 
-        return secondaryCheck;
+        return 1; 
     }
 } catch (error) {
     console.error("Error in contentFilterText:", error);
@@ -26,47 +27,63 @@ export async function contentFilterText(textInput){
 }
 }
 
-function checkOtherContent(textInput){
-  const possibilities = [
-    "restroom",
-    "bathroom",
-    "no clothes",
-    "chest",
-    "no shirt",
-    "toilet",
-    "changing clothes",
-    "kissing",
-    "clothingless",
-    "making out",
-    "revealing",
-    "shower",
-    "bath",
-    "pee"
-  ]
-
-  for(const item of possibilities){
-    if(textInput.includes(item)){
-      return 0; 
-    }
-  }
-  return 1; 
+export async function toBase64(blobURL){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = function () {
+        const base64 = reader.result;
+        resolve(base64);
+    };
+    reader.onerror = function (error) {
+        reject(error);
+    };
+    reader.readAsDataURL(blobURL);
+});
 }
 
-export async function contentFilterImage(blobURL){
-  let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
+export function uploadFile(file) {
+  return new Promise((resolve, reject) => {
+    const url = `https://api.cloudinary.com/v1_1/${cloudinaryCloudname}/upload`;
+    const fd = new FormData();
+    fd.append('upload_preset', 'jb97dxcc');
+    fd.append('file', file);
+
+    fetch(url, {
+        method: 'POST',
+        body: fd,
+    })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Failed to upload file');
+        }
+        return response.json();
+    })
+    .then((data) => {
+        let url = data.secure_url;
+        filterImage(url).then((response) => {
+          if(response.data.summary.action == 'reject'){
+            url = "../../static/asset/bam.svg";
+            resolve(url);
+          }else{
+            resolve(url); 
+          }
+        }); 
+    })
+    .catch((error) => {
+        console.error('Error uploading the file:', error);
+        reject(error); 
+    });
+});
+}
+
+export async function filterImage(url){
+   let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
     params: {
-      'url': blobURL,
+      'url': url,
       'workflow': 'wfl_fYMYmqaTT4Hcbfo8SKWRi',
       'api_user': '1820253693',
       'api_secret': 'Yc42azkarSBjGDhqiAHkZNEojyQfB7tm',
     }
   })
-  console.log(response); 
-  // const anchor = document.createElement('a');
-  // anchor.style.display = 'none'; 
-  // anchor.href = blobURL;
-  // anchor.download = 'image.jpg';
-  // document.body.appendChild(anchor);
-  // anchor.click();
-  // document.body.removeChild(anchor);
+  return response; 
 }

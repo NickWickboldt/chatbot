@@ -1,4 +1,4 @@
-import {contentFilterText, contentFilterImage} from "./content-filter.js";
+import {contentFilterText, filterImage, toBase64, uploadFile} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const imageFrame = document.querySelector(".image-frame"); 
@@ -38,11 +38,13 @@ async function submitClicked(){
 		img.classList.add('image-frame-loading'); 
 		img.src = "../../static/asset/image-loading.gif"; 
 		imageFrame.appendChild(img); 
-		query({"inputs": input}).then((response) => {
-			img.classList.remove('image-frame-loading'); 
-			img.classList.add('image-frame-image'); 
-			img.src = URL.createObjectURL(response); 
-			contentFilterImage(img.src); 
+		query({"inputs": input}).then(async (response) => {
+			let base64 = await toBase64(response)
+			uploadFile(base64).then((url) => {
+				img.classList.remove('image-frame-loading'); 
+				img.classList.add('image-frame-image'); 
+				img.src = url
+			})
 		});
 		entry.value = "";
 		entry.placeholder = "Type something in..."
