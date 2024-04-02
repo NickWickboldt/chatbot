@@ -61,6 +61,7 @@ async function submitClicked(){
 
 function display_input(input){
 	const displayH1 = document.createElement('h1');
+	displayH1.textContent = "";
 	displayH1.textContent = input;
 	imageFrame.appendChild(displayH1);
 }
