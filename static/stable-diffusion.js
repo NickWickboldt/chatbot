@@ -1,9 +1,12 @@
 import {contentFilterText, filterImage, toBase64, uploadFile} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
+const downloadButton = document.querySelector(".download-btn");
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
+
+
 
 async function query(data) {
 	const response = await fetch(
@@ -20,6 +23,7 @@ async function query(data) {
 	const result = await response.blob();
 	return result;
 }
+
 
 submitButton.addEventListener('click', () =>{
 	if(imageFrame.hasChildNodes() == true){
@@ -57,7 +61,6 @@ async function submitClicked(){
 		}
 	}
 	display_input(input);
-
 }
 
 function display_input(input){
