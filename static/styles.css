@@ -276,7 +276,10 @@ a {
     width: 65vmin;
     height: 65vmin;
     padding: 20px;
-    border: var(--darkBlackGrey) 1px solid;
+    border: 1px solid transparent;
+    border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    border-image-slice: 1;
+    outline: none;
     border-radius: 4px;
     margin: 12px;
     display: flex;
@@ -323,7 +326,7 @@ a {
 
 .submit-btn,
 .download-btn {
-    width: 12vmin;
+    width: 8vmin;
     height: 5vmin;
     border-radius: 10px;
     padding: 4px;
@@ -339,7 +342,7 @@ a {
 }
 
 .input-container button:hover {
-    scale: 1.1;
+    transform: translateY(-4px);
     transition: all .3s ease-in-out;
 }
 
