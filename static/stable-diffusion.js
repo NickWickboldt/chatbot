@@ -1,4 +1,4 @@
-import {contentFilterText, toBase64, uploadFile} from "./content-filter.js";
+import {contentFilterText, toBase64, uploadFile, filterImage} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const downloadButton = document.querySelector(".download-btn");
