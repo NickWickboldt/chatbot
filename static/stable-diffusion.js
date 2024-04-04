@@ -1,4 +1,4 @@
-import {contentFilterText, toBase64, uploadFile, filterImage} from "./content-filter.js";
+import {contentFilterText, toBase64, uploadFile, filterImage, downloadableLink} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const downloadButton = document.querySelector(".download-btn");
@@ -6,7 +6,6 @@ const downloadLink = document.querySelector(".download-link");
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
-var imageSRC;
 
 async function query(data) {
 	const response = await fetch(
@@ -25,9 +24,9 @@ async function query(data) {
 }
 
 downloadButton.addEventListener('click', () => {
-	if(imageFrame.hasChildNodes() == true)
+	if(imageFrame.hasChildNodes() == true && downloadableLink != null)
 	{
-		downloadLink.href = imageSRC;
+		downloadLink.href = downloadableLink;
 		downloadLink.download = "image.png";
 		downloadLink.click();
 	}
@@ -56,7 +55,6 @@ async function submitClicked(){
 				img.classList.remove('image-frame-loading'); 
 				img.classList.add('image-frame-image'); 
 				img.src = url;
-				imageSRC = base64;
 			})
 		});
 		entry.value = "";

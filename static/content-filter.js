@@ -1,5 +1,7 @@
 const cloudinaryCloudname = "dmm8zr0az"
 
+export var downloadableLink = null;
+
 export async function contentFilterText(textInput){
   let data = new FormData();
   data.append('text', textInput);
@@ -64,8 +66,10 @@ export function uploadFile(file) {
           if(response.data.summary.action == 'reject'){
             url = "../../static/asset/bam.svg";
             resolve(url);
+            downloadableLink = null;
           }else{
-            resolve(url); 
+            resolve(url);
+            downloadableLink = file; 
           }
         }); 
     })
