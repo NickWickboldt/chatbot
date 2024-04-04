@@ -366,7 +366,7 @@ a {
     .links-container {
         position: absolute;
         width: 100%;
-        height: 20vh;
+        height: 45vh + 60px;
         left: 0;
         top: 60px;
         display: flex;
@@ -386,6 +386,7 @@ a {
 
     .link{
         width: 100%;
+        font-size: 3vmin;
         text-align: center;
         color: var(--smokeWhite);
     }
