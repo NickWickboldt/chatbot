@@ -51,6 +51,47 @@ a {
     width: 100%;
 }
 
+.nav-toggler {
+    border-color: transparent;
+    padding: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    height: 39px;
+    display: none;
+}
+
+.nav-toggler span,
+.nav-toggler span:before,
+.nav-toggler span:after {
+    width: 28px;
+    height: 3px;
+    background:linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    display: block;
+    transition: .3s;
+}
+
+.nav-toggler span:before {
+    content: '';
+    transform: translateY(-9px);
+}
+
+.nav-toggler span:after {
+    content: '';
+    transform: translateY(6px);
+}
+
+.nav-toggler.toggler-open span {
+    background-color: transparent;
+}
+
+.nav-toggler.toggler-open span:before {
+    transform: translateY(0px) rotate(45deg);
+}
+
+.nav-toggler.toggler-open span:after {
+    transform: translateY(-3px) rotate(-45deg);
+}
+
 .tilte {
     font-size: 3vmin;
     margin-top: 4px;
@@ -314,4 +355,41 @@ a {
 
 /* Screen Size */
 
-@media screen and (min-width: 430px) {}
+@media screen and (max-width: 767px) {
+    .nav-toggler {
+        display: block;
+    }
+
+    .links-container {
+        position: absolute;
+        width: 100%;
+        height: 20vh;
+        left: 0;
+        top: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: var(--darkBlackGrey);
+        opacity: .75;
+        max-height: 0;
+        overflow: hidden;
+        transition: .3s;
+    }
+
+    .links-container.open {
+        max-height: 100vh;
+        overflow: visible;
+    }
+
+    .link{
+        width: 100%;
+        text-align: center;
+        color: var(--smokeWhite);
+    }
+
+    .link:hover{
+        background-color: var(--darkBlackGrey);
+        transition: all .1s ease-in-out;
+        font-size: 3vmin;
+    }
+}

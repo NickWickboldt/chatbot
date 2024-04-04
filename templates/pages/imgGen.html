@@ -20,7 +20,11 @@
             <a href="{{ url_for('textGen') }}" class="link">Text Generation</a>
             <a href="{{ url_for('codie') }}" class="link">Codie</a>
         </div>
+        <button class="nav-toggler">
+            <span></span>
+        </button>
     </nav>
+    
     <section class="main-container" id="mainContainer">
         <div class="home-title">
             <h1 class="gradient">Image Generator</h1>
@@ -51,6 +55,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/multer/1.4.3/multer.min.js"></script>
     <script src="{{ url_for('static', filename='stable-diffusion.js') }}" type="module" ></script>
+    <script src="{{ url_for('static', filename='navbar.js') }}"></script>
     <script src="https://kit.fontawesome.com/f936f45ab8.js" crossorigin="anonymous"></script>
 </body>
 

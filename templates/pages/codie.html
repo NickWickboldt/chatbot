@@ -18,6 +18,9 @@
             <a href="{{ url_for('textGen') }}" class="link">Text Generation</a>
             <a href="{{ url_for('codie') }}" class="link">Codie</a>
         </div>
+        <button class="nav-toggler">
+            <span></span>
+        </button>
     </nav>
 
     <section class="footer-section">
@@ -30,5 +33,6 @@
         <h5>2024 iCode | All Rights Reserved.</h5>
     </section>
     <script src="https://kit.fontawesome.com/f936f45ab8.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='navbar.js') }}"></script>
 </body>
 </html>
