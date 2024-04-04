@@ -1,6 +1,7 @@
+import {inputDisplay, display_input} from "./stable-diffusion.js";
 const cloudinaryCloudname = "dmm8zr0az"
 
-export var downloadableLink = null;
+export let downloadableLink = null;
 
 export async function contentFilterText(textInput){
   let data = new FormData();
@@ -69,7 +70,9 @@ export function uploadFile(file) {
             downloadableLink = null;
           }else{
             resolve(url);
-            downloadableLink = file; 
+            downloadableLink = file;
+
+            display_input(inputDisplay);
           }
         }); 
     })

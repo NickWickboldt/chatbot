@@ -7,6 +7,8 @@ const imageFrame = document.querySelector(".image-frame");
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
 
+export let inputDisplay;
+
 async function query(data) {
 	const response = await fetch(
 		"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
@@ -28,10 +30,8 @@ downloadButton.addEventListener('click', () => {
 	{
 		downloadLink.href = downloadableLink;
 		downloadLink.download = "image.png";
-		downloadLink.click();
 	}
 })
-
 
 submitButton.addEventListener('click', () =>{
 	if(imageFrame.hasChildNodes() == true){
@@ -42,8 +42,9 @@ submitButton.addEventListener('click', () =>{
 
 async function submitClicked(){
 	const input = entry.value;
+	inputDisplay = input;
 	let contentValue = await contentFilterText(input);
-
+	
 	if(contentValue == 1){
 		const img = document.createElement('img'); 
 		img.classList.add('image-frame-loading'); 
@@ -63,15 +64,17 @@ async function submitClicked(){
 		if(contentValue == 0){
 			entry.value = "";
 			entry.placeholder = "Please be appropriate!"; 
+			inputDisplay = "Please be appropriate!"
 		}else{
 			entry.value = "";
-			entry.placeholder = "There has been an error."; 
+			entry.placeholder = "There has been an error.";
+			inputDisplay = "There has been an error." 
 		}
 	}
-	display_input(input);
+	display_input("");
 }
 
-function display_input(input){
+export function display_input(input){
 	displayH1.textContent = input;
 	imageFrame.appendChild(displayH1);
 }
