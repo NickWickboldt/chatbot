@@ -1,12 +1,12 @@
-import {contentFilterText, filterImage, toBase64, uploadFile} from "./content-filter.js";
+import {contentFilterText, toBase64, uploadFile} from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const downloadButton = document.querySelector(".download-btn");
+const downloadLink = document.querySelector(".download-link");
 const imageFrame = document.querySelector(".image-frame"); 
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
-
-
+var imageSRC;
 
 async function query(data) {
 	const response = await fetch(
@@ -23,6 +23,15 @@ async function query(data) {
 	const result = await response.blob();
 	return result;
 }
+
+downloadButton.addEventListener('click', () => {
+	if(imageFrame.hasChildNodes() == true)
+	{
+		downloadLink.href = imageSRC;
+		downloadLink.download = "image.png";
+		downloadLink.click();
+	}
+})
 
 
 submitButton.addEventListener('click', () =>{
@@ -46,7 +55,8 @@ async function submitClicked(){
 			uploadFile(base64).then((url) => {
 				img.classList.remove('image-frame-loading'); 
 				img.classList.add('image-frame-image'); 
-				img.src = url
+				img.src = url;
+				imageSRC = base64;
 			})
 		});
 		entry.value = "";
