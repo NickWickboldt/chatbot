@@ -42,36 +42,39 @@ submitButton.addEventListener('click', () =>{
 
 async function submitClicked(){
 	const input = entry.value;
-	inputDisplay = input;
-	let contentValue = await contentFilterText(input);
-	
-	if(contentValue == 1){
-		const img = document.createElement('img'); 
-		img.classList.add('image-frame-loading'); 
-		img.src = "../../static/asset/image-loading.gif"; 
-		imageFrame.appendChild(img); 
-		query({"inputs": input}).then(async (response) => {
-			let base64 = await toBase64(response)
-			uploadFile(base64).then((url) => {
-				img.classList.remove('image-frame-loading'); 
-				img.classList.add('image-frame-image'); 
-				img.src = url;
-			})
-		});
-		entry.value = "";
-		entry.placeholder = "Type something in..."
-	}else{
-		if(contentValue == 0){
+	if(input != ""){
+		inputDisplay = input;
+		let contentValue = await contentFilterText(input);
+		
+		if(contentValue == 1){
+			const img = document.createElement('img'); 
+			img.classList.add('image-frame-loading'); 
+			img.src = "../../static/asset/image-loading.gif"; 
+			imageFrame.appendChild(img); 
+			query({"inputs": input}).then(async (response) => {
+				let base64 = await toBase64(response)
+				uploadFile(base64).then((url) => {
+					img.classList.remove('image-frame-loading'); 
+					img.classList.add('image-frame-image'); 
+					img.src = url;
+				})
+			});
 			entry.value = "";
-			entry.placeholder = "Please be appropriate!"; 
-			inputDisplay = "Please be appropriate!"
+			entry.placeholder = "Type something in..."
 		}else{
-			entry.value = "";
-			entry.placeholder = "There has been an error.";
-			inputDisplay = "There has been an error." 
+			if(contentValue == 0){
+				entry.value = "";
+				entry.placeholder = "Please be appropriate!"; 
+				inputDisplay = "Please be appropriate!"
+			}else{
+				entry.value = "";
+				entry.placeholder = "There has been an error.";
+				inputDisplay = "There has been an error." 
+			}
 		}
+		display_input("");
 	}
-	display_input("");
+	
 }
 
 export function display_input(input){
