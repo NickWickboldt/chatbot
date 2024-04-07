@@ -66,7 +66,7 @@ a {
 .nav-toggler span:after {
     width: 28px;
     height: 3px;
-    background:linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    background: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     display: block;
     transition: .3s;
 }
@@ -93,7 +93,7 @@ a {
     transform: translateY(-3px) rotate(-45deg);
 }
 
-.tilte {
+.title h1 {
     font-size: 3vmin;
     margin-top: 4px;
 }
@@ -185,7 +185,7 @@ a {
 
 .project {
     width: 90vmin;
-    height: 300px;
+    height: 45vmin;
     border-radius: 20px;
     box-shadow: 0 5px 5px var(--smokeWhite);
     transition: all .8s ease-in-out;
@@ -205,7 +205,7 @@ a {
     position: absolute;
     background-color: var(--darkBlackGrey);
     opacity: .5;
-    height: 300px;
+    height: 45vmin;
     width: 90vmin;
     border-radius: 20px;
     display: none;
@@ -254,19 +254,13 @@ a {
 }
 
 .bg-img2 {
-    background: url(asset/temp-bg.jpg);
+    background: url(asset/text-gen-bg.jpg);
     background-position: center;
     background-size: cover;
 }
 
 .bg-img3 {
-    background: url(asset/temp-bg.jpg);
-    background-position: center;
-    background-size: cover;
-}
-
-.bg-img4 {
-    background: url(asset/temp-bg.jpg);
+    background: url(asset/codie-gif.gif);
     background-position: center;
     background-size: cover;
 }
@@ -326,7 +320,8 @@ a {
 }
 
 .submit-btn,
-.download-btn {
+.download-btn,
+.mic-btn {
     width: 8vmin;
     height: 5vmin;
     border-radius: 10px;
@@ -335,6 +330,9 @@ a {
     background: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     color: var(--lightGrey);
     border: 1px var(--smokeWhite) solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .download-btn {
@@ -367,39 +365,39 @@ a {
     scroll-behavior: smooth;
 }
 
-.text-frame::-webkit-scrollbar{
+.text-frame::-webkit-scrollbar {
     width: 2vmin;
 }
 
-.text-frame::-webkit-scrollbar-thumb{
+.text-frame::-webkit-scrollbar-thumb {
     background: linear-gradient(to top, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     border-radius: 20px;
-    border: solid .6vmin var(--smokeWhite); 
+    border: solid .6vmin var(--smokeWhite);
 }
 
-.text-frame::-webkit-scrollbar-track{
+.text-frame::-webkit-scrollbar-track {
     background: var(--smokeWhite);
 }
 
-.text-frame p{
+.text-frame p {
     font-size: 1.7vmin;
 
 }
 
-.ai-bubble{
+.ai-bubble {
     text-align: left;
     align-self: flex-end;
     background-color: var(--AppleGreen);
 }
 
-.user-bubble{
+.user-bubble {
     align-self: start;
     text-align: left;
     background-color: var(--iCodeBlue);
-} 
+}
 
 .ai-bubble,
-.user-bubble{
+.user-bubble {
     max-width: 50%;
     width: fit-content;
     height: fit-content;
@@ -413,35 +411,52 @@ a {
 .ai-bubble::after {
     content: '';
     position: absolute;
-    bottom: -4px; /* Adjust this value based on your design */
-    transform:rotateZ(-35deg);
+    bottom: -4px;
+    /* Adjust this value based on your design */
+    transform: rotateZ(-35deg);
     border-style: solid;
     border-width: 4vmin 1.2vmin 0;
     border-color: var(--AppleGreen) transparent transparent;
     display: block;
     width: 0;
-    right:-5px;
+    right: -5px;
     z-index: -1;
 }
 
 .user-bubble::after {
     content: '';
     position: absolute;
-    bottom: -7px; /* Adjust this value based on your design */
-    transform:rotateZ(35deg);
+    bottom: -7px;
+    /* Adjust this value based on your design */
+    transform: rotateZ(35deg);
     border-style: solid;
     border-width: 4vmin 1vmin 0;
     border-color: var(--iCodeBlue) transparent transparent;
     display: block;
     width: 0;
-    left:-2px;
+    left: -2px;
     z-index: -1;
 }
 
-.arrow-up{
+.arrow-up {
     scale: 1.4;
 }
 
+/* Codie */
+
+.codie-frame {
+    border: 2px solid transparent;
+    border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    border-image-slice: 1;
+    outline: none;
+    width: 100%;
+    height: 49vh;
+}
+
+.sound-waves {
+    width: 60%;
+    filter: invert();
+}
 
 /* Screen Size */
 
@@ -471,14 +486,14 @@ a {
         overflow: visible;
     }
 
-    .link{
+    .link {
         width: 100%;
         font-size: 3vmin;
         text-align: center;
         color: var(--smokeWhite);
     }
 
-    .link:hover{
+    .link:hover {
         background-color: var(--darkBlackGrey);
         transition: all .1s ease-in-out;
         font-size: 3vmin;
