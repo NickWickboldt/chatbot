@@ -7,6 +7,7 @@
     --smokeWhite: #f5f5f5;
     --iCodeRed: #E74D2C;
     --iCodeBlue: #3F6FEF;
+    --AppleGreen: #76CD26;
 }
 
 * {
@@ -349,13 +350,98 @@ a {
 
 /* Text Generation */
 
-.chat-box-frame {
+.text-frame {
     background-color: var(--smokeLavender);
     width: 100%;
     height: 450px;
     margin-bottom: 30px;
     border-radius: 20px;
+    border: 2px solid transparent;
+    border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    border-image-slice: 1;
+    outline: none;
+    padding: 1vmin;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
 }
+
+.text-frame::-webkit-scrollbar{
+    width: 2vmin;
+}
+
+.text-frame::-webkit-scrollbar-thumb{
+    background: linear-gradient(to top, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
+    border-radius: 20px;
+    border: solid .6vmin var(--smokeWhite); 
+}
+
+.text-frame::-webkit-scrollbar-track{
+    background: var(--smokeWhite);
+}
+
+.text-frame p{
+    font-size: 1.7vmin;
+
+}
+
+.ai-bubble{
+    text-align: left;
+    align-self: flex-end;
+    background-color: var(--AppleGreen);
+}
+
+.user-bubble{
+    align-self: start;
+    text-align: left;
+    background-color: var(--iCodeBlue);
+} 
+
+.ai-bubble,
+.user-bubble{
+    max-width: 50%;
+    width: fit-content;
+    height: fit-content;
+    position: relative;
+    margin: 1vmin;
+    padding: .5vmin;
+    border-radius: 10px;
+    color: var(--smokeWhite);
+}
+
+.ai-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; /* Adjust this value based on your design */
+    transform:rotateZ(-35deg);
+    border-style: solid;
+    border-width: 4vmin 1.2vmin 0;
+    border-color: var(--AppleGreen) transparent transparent;
+    display: block;
+    width: 0;
+    right:-5px;
+    z-index: -1;
+}
+
+.user-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -7px; /* Adjust this value based on your design */
+    transform:rotateZ(35deg);
+    border-style: solid;
+    border-width: 4vmin 1vmin 0;
+    border-color: var(--iCodeBlue) transparent transparent;
+    display: block;
+    width: 0;
+    left:-2px;
+    z-index: -1;
+}
+
+.arrow-up{
+    scale: 1.4;
+}
+
 
 /* Screen Size */
 

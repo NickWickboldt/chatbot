@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>iCode: Text Generation</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
 </head>
 <body>
     <nav class="navbar">
@@ -28,10 +29,10 @@
             <h1 class="gradient">Text Generation</h1>
         </div>
         <div class="wrapper">
-            <div class="chat-box-frame"></div>
+            <div class="text-frame"></div>
             <div class="input-container">
-                <input class="image-gen-entry" type="text" placeholder="Type something in...">
-                <button class="submit-btn">Submit</button>
+                <input class="image-gen-entry" type="text" placeholder="Ask me a question...">
+                <button class="submit-btn"><i class="fa-solid fa-circle-arrow-up arrow-up"></i></button>
             </div>             
         </div>  
     </section>
@@ -45,6 +46,8 @@
         </div>
         <h5>2024 iCode | All Rights Reserved.</h5>
     </section>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formdata-polyfill/formdata.min.js"></script>
     <script src="https://kit.fontawesome.com/f936f45ab8.js" crossorigin="anonymous"></script>
     <script src="{{ url_for('static', filename='navbar.js') }}"></script>
     <script src="{{ url_for('static', filename='mixtral.js') }}" type="module" ></script>

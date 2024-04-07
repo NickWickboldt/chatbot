@@ -57,6 +57,9 @@ async function submitClicked(){
 					img.classList.remove('image-frame-loading'); 
 					img.classList.add('image-frame-image'); 
 					img.src = url;
+					if(url != "../../static/asset/bam.svg"){
+						display_input(input)
+					}
 				})
 			});
 			entry.value = "";

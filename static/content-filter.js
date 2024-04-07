@@ -1,4 +1,3 @@
-import {inputDisplay, display_input} from "./stable-diffusion.js";
 const cloudinaryCloudname = "dmm8zr0az"
 
 export let downloadableLink = null;
@@ -72,7 +71,6 @@ export function uploadFile(file) {
             resolve(url);
             downloadableLink = file;
 
-            display_input(inputDisplay);
           }
         }); 
     })
@@ -94,3 +92,26 @@ export async function filterImage(url){
   })
   return response; 
 }
+
+
+export function stopAtLastPeriod(str){
+  let indexOf = str.lastIndexOf(".");
+  if(indexOf != -1){
+    str = str.substring(0, indexOf+1); 
+  }
+
+  return str; 
+}
+
+/*
+Getting through:
+XXX
+incest
+kink
+prostitute
+onlyfans
+firearm
+gun
+shooting
+kill
+*/
