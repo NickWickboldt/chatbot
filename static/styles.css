@@ -25,6 +25,7 @@ a {
     text-decoration: none;
 }
 
+
 .gradient {
     background: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
     background-clip: text;
@@ -347,6 +348,15 @@ a {
     cursor: pointer;
 }
 
+i{
+    color: white;
+
+}
+
+
+
+
+
 /* Text Generation */
 
 .text-frame {
@@ -442,6 +452,11 @@ a {
 .arrow-up {
     scale: 1.4;
 }
+
+.arrow-down{
+    scale:1.2;
+}
+
 
 /* Codie */
 

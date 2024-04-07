@@ -1,8 +1,12 @@
-import { contentFilterText, stopAtLastPeriod } from "./content-filter.js";
+import { contentFilterText, stopAtLastPeriod, removeBlankLines } from "./content-filter.js";
 
 const submitButton = document.querySelector(".submit-btn");
 const entry = document.querySelector(".image-gen-entry");
 const textFrame = document.querySelector(".text-frame");
+const downloadButton = document.querySelector(".download-btn");
+const downloadableLink = document.querySelector(".download-link");
+
+let records = [];
 
 async function query(data) {
     const response = await fetch(
@@ -20,10 +24,32 @@ async function query(data) {
     return result;
 }
 
+downloadButton.addEventListener('click', () => {
+    const filename = "records.txt";
+    let conversation = "";
+
+
+    if (records.length > 0) {
+        records.forEach(record => {
+            conversation += record + '\n' + '\n';
+        });
+
+        const blob = new Blob([conversation], {
+            type: 'text/plain;charset=utf-8'
+        });
+
+        downloadableLink.download = filename;
+        downloadableLink.href = window.URL.createObjectURL(blob);
+    }
+
+})
+
 
 submitButton.addEventListener('click', () => {
     submit();
 });
+
+
 
 async function submit() {
     const input = entry.value;
@@ -45,6 +71,9 @@ async function submit() {
                     textFrame.scrollTop = textFrame.scrollHeight;
                     entry.value = '';
                     entry.placeholder = "Ask me a question...";
+                    let noBlankLines = removeBlankLines(cutOff);
+                    records.push("User: " + userInput.innerHTML);
+                    records.push("Ai: " + noBlankLines);
                 } else {
                     setPlaceholder(aiContentValue);
                 }
