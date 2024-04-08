@@ -362,7 +362,7 @@ i{
 .text-frame {
     background-color: var(--smokeLavender);
     width: 100%;
-    height: 450px;
+    height: 60vmin;
     margin-bottom: 30px;
     border-radius: 20px;
     border: 2px solid transparent;
@@ -408,12 +408,13 @@ i{
 }
 
 .ai-bubble,
-.user-bubble {
+.user-bubble,
+.image-bubble {
     max-width: 50%;
     width: fit-content;
     height: fit-content;
     position: relative;
-    margin: 1vmin;
+    margin: .5vmin;
     padding: .5vmin;
     border-radius: 10px;
     color: var(--smokeWhite);
@@ -422,11 +423,10 @@ i{
 .ai-bubble::after {
     content: '';
     position: absolute;
-    bottom: -4px;
-    /* Adjust this value based on your design */
+    bottom: -6px;
     transform: rotateZ(-35deg);
     border-style: solid;
-    border-width: 4vmin 1.2vmin 0;
+    border-width: 4vmin 1vmin 0;
     border-color: var(--AppleGreen) transparent transparent;
     display: block;
     width: 0;
@@ -438,7 +438,6 @@ i{
     content: '';
     position: absolute;
     bottom: -7px;
-    /* Adjust this value based on your design */
     transform: rotateZ(35deg);
     border-style: solid;
     border-width: 4vmin 1vmin 0;
@@ -460,13 +459,30 @@ i{
 
 /* Codie */
 
-.codie-frame {
-    border: 2px solid transparent;
-    border-image: linear-gradient(to top left, var(--iCodeRed) 0%, var(--iCodeBlue) 100%);
-    border-image-slice: 1;
-    outline: none;
-    width: 100%;
-    height: 49vh;
+.image-generated-codie{
+    width: 25vmin;
+    height: 25vmin;
+    border-radius: 8px;
+    margin: 1vmin 1vmin 0 1vmin;
+}
+
+.image-bubble{
+    align-self: end;
+    background-color: var(--AppleGreen);
+}
+
+.image-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    transform: rotateZ(-35deg);
+    border-style: solid;
+    border-width: 4vmin 1vmin 0;
+    border-color: var(--AppleGreen) transparent transparent;
+    display: block;
+    width: 0;
+    right: -5px;
+    z-index: -1;
 }
 
 .sound-waves {
