@@ -28,8 +28,6 @@ async function query(data) {
 downloadButton.addEventListener('click', () => {
     const filename = "records.txt";
     let conversation = "";
-
-
     if (records.length > 0) {
         records.forEach(record => {
             conversation += record + '\n' + '\n';
@@ -38,11 +36,9 @@ downloadButton.addEventListener('click', () => {
         const blob = new Blob([conversation], {
             type: 'text/plain;charset=utf-8'
         });
-
         downloadableLink.download = filename;
         downloadableLink.href = window.URL.createObjectURL(blob);
     }
-
 })
 
 

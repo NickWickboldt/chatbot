@@ -73,35 +73,24 @@ async function imageGen(data) {
 }
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
-    // Set up MediaRecorder
     mediaRecorder = new MediaRecorder(stream);
     let chunks = [];
-
-    // Handle data available event
     mediaRecorder.ondataavailable = function (event) {
         chunks.push(event.data);
     };
-
-    // Handle stop event
     mediaRecorder.onstop = function () {
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
         const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
-
-        // Save the audio file
         audioFile.href = url;
         audioFile.download = 'recorded-speech.ogg';
-
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
             mainCall(userAudio);
         });
     };
-
 }).catch(function (err) {
     console.error('Error accessing microphone:', err);
 });
-
 
 micButton.addEventListener('click', () => {
     const icon = micButton.childNodes[0].nodeName.toLowerCase();
@@ -122,10 +111,10 @@ micButton.addEventListener('click', () => {
 })
 
 submitButton.addEventListener('click', () => {
-    submit();
+    submitEntry();
 })
 
-async function submit() {
+async function submitEntry() {
     const input = entry.value.toLowerCase();
     mainCall(input);
 }
@@ -150,8 +139,7 @@ async function mainCall(userValue) {
                         aiOutput.innerHTML = 'Here is your image!'
                         frame.appendChild(aiOutput);
                         frame.scrollTop = frame.scrollHeight;
-                        entry.value = '';
-                        entry.placeholder = placeholderText;
+                        resetPlaceholder();
                     })
                 });
             } else {
@@ -164,8 +152,7 @@ async function mainCall(userValue) {
                         frame.appendChild(userInput);
                         frame.appendChild(aiOutput);
                         frame.scrollTop = frame.scrollHeight;
-                        entry.value = '';
-                        entry.placeholder = placeholderText;
+                        resetPlaceholder();
                         let noBlankLines = removeBlankLines(cutOff);
                         records.push("User: " + userInput.innerHTML);
                         records.push("Ai: " + noBlankLines);
@@ -202,4 +189,9 @@ function setPlaceholder(cv) {
         entry.value = "";
         entry.placeholder = "There has been an error.";
     }
+}
+
+function resetPlaceholder(){
+    entry.value = '';
+    entry.placeholder = placeholderText;
 }
