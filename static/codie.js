@@ -7,9 +7,9 @@ const submitButton = document.querySelector('.submit-btn');
 const downloadButton = document.querySelector('.download-btn');
 const downloadableLink = document.querySelector('.download-link');
 const placeholderText = "Chat with Codie or ask him to generate an image"
-const userInput = document.createElement('p');
+const userInput = document.createElement('div');
 userInput.classList.add("user-bubble");
-const aiOutput = document.createElement('p');
+const aiOutput = document.createElement('div');
 aiOutput.classList.add("ai-bubble");
 const imgGen0 = 'generate an image';
 const imgGen1 = 'generate me an image';
@@ -183,8 +183,8 @@ async function mainCall(userValue) {
 function codieStart() {
     const codieIntro = "Hello, my name is Codie. How can I assist you?";
     const codieIntruction = "Start your sentence with 'generate me an image' or anything to just chat with me!";
-    const codieIntroTag = document.createElement('p');
-    const codieIntructionTag = document.createElement('p');
+    const codieIntroTag = document.createElement('div');
+    const codieIntructionTag = document.createElement('div');
     codieIntroTag.classList.add('ai-bubble');
     codieIntructionTag.classList.add('ai-bubble');
     codieIntroTag.textContent = codieIntro;

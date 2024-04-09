@@ -10,6 +10,7 @@ let records = [];
 
 async function query(data) {
     const response = await fetch(
+        //https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it Gemma
         "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
         {
             headers: {
