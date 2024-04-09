@@ -46,8 +46,6 @@ submitButton.addEventListener('click', () => {
     submit();
 });
 
-
-
 async function submit() {
     const input = entry.value;
     if (input != "") {

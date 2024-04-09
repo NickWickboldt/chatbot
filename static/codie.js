@@ -1,4 +1,4 @@
-import { contentFilterText, filterImage, stopAtLastPeriod, removeBlankLines, toBase64, uploadFile } from "./content-filter.js";
+import { contentFilterText, stopAtLastPeriod, removeBlankLines, toBase64, uploadFile } from "./content-filter.js";
 
 const micButton = document.querySelector('.mic-btn');
 const entry = document.querySelector(".image-gen-entry");
@@ -6,22 +6,17 @@ const frame = document.querySelector('.text-frame');
 const submitButton = document.querySelector('.submit-btn');
 const downloadButton = document.querySelector('.download-btn');
 const downloadableLink = document.querySelector('.download-link');
-const placeholderText = "Chat with Codie or ask him to generate an image"
-const userInput = document.createElement('div');
-userInput.classList.add("user-bubble");
-const aiOutput = document.createElement('div');
-aiOutput.classList.add("ai-bubble");
-const imgGen0 = 'generate an image';
-const imgGen1 = 'generate me an image';
-const imgGen2 = 'generate image';
-const audioFile = document.createElement('a');
 const fileReader = new FileReader();
-let mediaRecorder;
+const imgPromtString = [
+    'generate me an image',
+    'generate an image',
+    'generate image',
+    'make a picture']
 const records = [];
+let mediaRecorder;
 codieStart();
 
 async function audioToText(filename) {
-    //const fs = new FileReader();
     fileReader.readAsArrayBuffer(filename);
     const data = filename;
     const response = await fetch(
@@ -80,9 +75,6 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
     };
     mediaRecorder.onstop = function () {
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
-        const url = URL.createObjectURL(blob);
-        audioFile.href = url;
-        audioFile.download = 'recorded-speech.ogg';
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
             mainCall(userAudio);
@@ -110,6 +102,22 @@ micButton.addEventListener('click', () => {
     }
 })
 
+downloadButton.addEventListener('click', () => {
+    const filename = "records.txt";
+    let conversation = "";
+    if (records.length > 0) {
+        records.forEach(record => {
+            conversation += record + '\n' + '\n';
+        });
+
+        const blob = new Blob([conversation], {
+            type: 'text/plain;charset=utf-8'
+        });
+        downloadableLink.download = filename;
+        downloadableLink.href = window.URL.createObjectURL(blob);
+    }
+})
+
 submitButton.addEventListener('click', () => {
     submitEntry();
 })
@@ -120,10 +128,14 @@ async function submitEntry() {
 }
 
 async function mainCall(userValue) {
+    const userInput = document.createElement('div');
+    userInput.classList.add("user-bubble");
+    const aiOutput = document.createElement('div');
+    aiOutput.classList.add("ai-bubble");
     if (userValue != "") {
         let contentValue = await contentFilterText(userValue);
         if (contentValue == 1) {
-            if (userValue.includes(imgGen0) || userValue.includes(imgGen1) || userValue.includes(imgGen2)) {
+            if (checkImgPromt(userValue)) {
                 const imgCon = document.createElement('div');
                 const img = document.createElement('img');
                 imageGen({ "inputs": userValue }).then(async (response) => {
@@ -140,6 +152,9 @@ async function mainCall(userValue) {
                         frame.appendChild(aiOutput);
                         frame.scrollTop = frame.scrollHeight;
                         resetPlaceholder();
+                        records.push("User: " + userInput.innerHTML);
+                        records.push(img.src);
+                        records.push("Ai: " + aiOutput.innerHTML);
                     })
                 });
             } else {
@@ -148,7 +163,7 @@ async function mainCall(userValue) {
                     if (aiContentValue == 1) {
                         userInput.innerHTML = userValue;
                         let cutOff = stopAtLastPeriod(response[0].generated_text);
-                        aiOutput.innerHTML = cutOff
+                        aiOutput.innerHTML = cutOff;
                         frame.appendChild(userInput);
                         frame.appendChild(aiOutput);
                         frame.scrollTop = frame.scrollHeight;
@@ -180,7 +195,6 @@ function codieStart() {
     frame.appendChild(codieIntructionTag);
 }
 
-
 function setPlaceholder(cv) {
     if (cv == 0) {
         entry.value = "";
@@ -191,7 +205,16 @@ function setPlaceholder(cv) {
     }
 }
 
-function resetPlaceholder(){
+function resetPlaceholder() {
     entry.value = '';
-    entry.placeholder = placeholderText;
+    entry.placeholder = "Chat with Codie or ask him to generate an image";
+}
+
+function checkImgPromt(input) {
+    for (let i = 0; i < imgPromtString.length; i++) {
+        if (input.includes(imgPromtString[i])) {
+            return true;
+        }
+    }
+    return false;
 }
