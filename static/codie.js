@@ -193,6 +193,8 @@ function codieStart() {
     codieIntructionTag.textContent = codieIntruction;
     frame.appendChild(codieIntroTag);
     frame.appendChild(codieIntructionTag);
+    records.push("AI: " + codieIntro);
+    records.push("AI: " + codieIntruction);
 }
 
 function setPlaceholder(cv) {
