@@ -99,12 +99,11 @@ export function stopAtLastPeriod(str){
   if(indexOf != -1){
     str = str.substring(0, indexOf+1); 
   }
-
   return str; 
 }
 
 export function removeBlankLines(str){
-  let paragraphWithoutBlankLines = str.replace(/^\s*[\r\n]/gm, '');
+  let paragraphWithoutBlankLines = str.replace(/^\s*[\r\n]|[^\w\s]/gm, '');
   return paragraphWithoutBlankLines;
 }
 

@@ -6,15 +6,43 @@ const frame = document.querySelector('.text-frame');
 const submitButton = document.querySelector('.submit-btn');
 const downloadButton = document.querySelector('.download-btn');
 const downloadableLink = document.querySelector('.download-link');
+const codieIntroTag = document.createElement('div');
 const fileReader = new FileReader();
+
+let bubbles = [codieIntroTag];
+
 const imgPromtString = [
-    'generate me an image',
-    'generate an image',
-    'generate image',
-    'make a picture']
+    'picture','image', 'show me', 'photo'
+]
 const records = [];
 let mediaRecorder;
 codieStart();
+
+function makeBubbleEvents() {
+    bubbles.forEach(aiBubble => {
+        aiBubble.addEventListener('click', () => {
+            console.log(aiBubble.innerHTML)
+            const options = {
+                method: 'POST',
+                headers: {
+                    'xi-api-key': '6b198811761454a818ba50ecd87894e6',
+                    'Content-Type': 'application/json'
+                },
+                body: `{"text": "${aiBubble.innerHTML.trim()}"}`,
+                type: "arrayBuffer"
+            };
+            fetch('https://api.elevenlabs.io/v1/text-to-speech/vzIvYzEA9hRE16PpL5jb', options)
+                .then(async (response) => {
+                    const arrayBuffer = await response.arrayBuffer();
+                    const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(blob);
+                    const audioElement = new Audio(audioUrl);
+                    audioElement.play();
+                })
+                .catch(err => console.error(err));
+        });
+    });
+}
 
 async function audioToText(filename) {
     fileReader.readAsArrayBuffer(filename);
@@ -74,6 +102,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
         chunks.push(event.data);
     };
     mediaRecorder.onstop = function () {
+        micButton.disabled = true; 
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
@@ -163,12 +192,14 @@ async function mainCall(userValue) {
                     if (aiContentValue == 1) {
                         userInput.innerHTML = userValue;
                         let cutOff = stopAtLastPeriod(response[0].generated_text);
-                        aiOutput.innerHTML = cutOff;
+                        let noBlankLines = removeBlankLines(cutOff);
+                        aiOutput.innerHTML = noBlankLines;
                         frame.appendChild(userInput);
                         frame.appendChild(aiOutput);
+                        bubbles.push(aiOutput);
+                        makeBubbleEvents(); 
                         frame.scrollTop = frame.scrollHeight;
                         resetPlaceholder();
-                        let noBlankLines = removeBlankLines(cutOff);
                         records.push("User: " + userInput.innerHTML);
                         records.push("Ai: " + noBlankLines);
                     } else {
@@ -180,12 +211,13 @@ async function mainCall(userValue) {
             setPlaceholder(contentValue);
         }
     }
+    micButton.disabled = false; 
 }
 
 function codieStart() {
     const codieIntro = "Hello, my name is Codie. How can I assist you?";
     const codieIntruction = "Start your sentence with 'generate me an image' or anything to just chat with me!";
-    const codieIntroTag = document.createElement('div');
+
     const codieIntructionTag = document.createElement('div');
     codieIntroTag.classList.add('ai-bubble');
     codieIntructionTag.classList.add('ai-bubble');
