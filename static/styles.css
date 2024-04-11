@@ -373,6 +373,7 @@ i{
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    overflow-x: hidden;
     scroll-behavior: smooth;
 }
 

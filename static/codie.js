@@ -18,6 +18,7 @@ const records = [];
 let mediaRecorder;
 codieStart();
 
+//on hover making speakable bubble
 function makeBubbleEvents() {
     bubbles.forEach(aiBubble => {
         aiBubble.addEventListener('click', () => {
@@ -63,6 +64,7 @@ fileReader.onload = function (event) {
     const arrayBuffer = event.target.result;
 };
 
+//could use Gemma
 async function textGen(data) {
     const response = await fetch(
         "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
@@ -156,6 +158,7 @@ async function submitEntry() {
     mainCall(input);
 }
 
+//add loading symbol
 async function mainCall(userValue) {
     const userInput = document.createElement('div');
     userInput.classList.add("user-bubble");

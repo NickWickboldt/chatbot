@@ -102,6 +102,7 @@ export function stopAtLastPeriod(str){
   return str; 
 }
 
+//put back periods
 export function removeBlankLines(str){
   let paragraphWithoutBlankLines = str.replace(/^\s*[\r\n]|[^\w\s]/gm, '');
   return paragraphWithoutBlankLines;
