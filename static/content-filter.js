@@ -102,10 +102,17 @@ export function stopAtLastPeriod(str){
   return str; 
 }
 
-//put back periods
 export function removeBlankLines(str){
-  let paragraphWithoutBlankLines = str.replace(/^\s*[\r\n]|[^\w\s]/gm, '');
-  return paragraphWithoutBlankLines;
+  let CR = 13; 
+  let LF = 10; 
+  let regex = /^[a-zA-z0-9\s,.]*$/
+  let temp = "";
+  for(let i = 0; i< str.length; i++){
+    if(regex.test(str[i]) && str[i].charCodeAt(0) != CR && str[i].charCodeAt(0) != LF){
+      temp += str[i]
+    }
+  }
+  return temp; 
 }
 
 /*

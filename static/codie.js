@@ -7,41 +7,35 @@ const submitButton = document.querySelector('.submit-btn');
 const downloadButton = document.querySelector('.download-btn');
 const downloadableLink = document.querySelector('.download-link');
 const codieIntroTag = document.createElement('div');
+const codieInstructionTag = document.createElement('div');
 const fileReader = new FileReader();
-
-let bubbles = [codieIntroTag];
-
 const imgPromtString = [
-    'picture','image', 'show me', 'photo'
+    'picture', 'image', 'show me', 'photo'
 ]
 const records = [];
 let mediaRecorder;
 codieStart();
 
-//on hover making speakable bubble
-function makeBubbleEvents() {
-    bubbles.forEach(aiBubble => {
-        aiBubble.addEventListener('click', () => {
-            console.log(aiBubble.innerHTML)
-            const options = {
-                method: 'POST',
-                headers: {
-                    'xi-api-key': '6b198811761454a818ba50ecd87894e6',
-                    'Content-Type': 'application/json'
-                },
-                body: `{"text": "${aiBubble.innerHTML.trim()}"}`,
-                type: "arrayBuffer"
-            };
-            fetch('https://api.elevenlabs.io/v1/text-to-speech/vzIvYzEA9hRE16PpL5jb', options)
-                .then(async (response) => {
-                    const arrayBuffer = await response.arrayBuffer();
-                    const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(blob);
-                    const audioElement = new Audio(audioUrl);
-                    audioElement.play();
-                })
-                .catch(err => console.error(err));
-        });
+function addBubbleEvent(bubble){
+    bubble.addEventListener('click', () => {
+        const options = {
+            method: 'POST',
+            headers: {
+                'xi-api-key': '6b198811761454a818ba50ecd87894e6',
+                'Content-Type': 'application/json'
+            },
+            body: `{"text": "${bubble.innerHTML.trim()}"}`,
+            type: "arrayBuffer"
+        };
+        fetch('https://api.elevenlabs.io/v1/text-to-speech/vzIvYzEA9hRE16PpL5jb', options)
+            .then(async (response) => {
+                const arrayBuffer = await response.arrayBuffer();
+                const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(blob);
+                const audioElement = new Audio(audioUrl);
+                audioElement.play();
+            })
+            .catch(err => console.error(err));
     });
 }
 
@@ -67,7 +61,7 @@ fileReader.onload = function (event) {
 //could use Gemma
 async function textGen(data) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+        "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
         {
             headers: {
                 Authorization: "Bearer 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",
@@ -104,7 +98,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
         chunks.push(event.data);
     };
     mediaRecorder.onstop = function () {
-        micButton.disabled = true; 
+        micButton.disabled = true;
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
@@ -154,11 +148,10 @@ submitButton.addEventListener('click', () => {
 })
 
 async function submitEntry() {
-    const input = entry.value.toLowerCase();
+    const input = entry.value.toLowerCase().trim();
     mainCall(input);
 }
 
-//add loading symbol
 async function mainCall(userValue) {
     const userInput = document.createElement('div');
     userInput.classList.add("user-bubble");
@@ -168,20 +161,22 @@ async function mainCall(userValue) {
         let contentValue = await contentFilterText(userValue);
         if (contentValue == 1) {
             if (checkImgPromt(userValue)) {
+                submitButton.disabled = true; 
+                userInput.innerHTML = userValue;
+                aiOutput.innerHTML = "Loading...";
+                frame.appendChild(userInput);
+                frame.appendChild(aiOutput);
                 const imgCon = document.createElement('div');
                 const img = document.createElement('img');
                 imageGen({ "inputs": userValue }).then(async (response) => {
                     let base64 = await toBase64(response)
                     uploadFile(base64).then((url) => {
-                        userInput.innerHTML = userValue;
-                        frame.appendChild(userInput);
                         img.src = url;
                         img.classList.add('image-generated-codie');
                         imgCon.classList.add('image-bubble');
                         imgCon.appendChild(img);
                         frame.appendChild(imgCon);
                         aiOutput.innerHTML = 'Here is your image!'
-                        frame.appendChild(aiOutput);
                         frame.scrollTop = frame.scrollHeight;
                         resetPlaceholder();
                         records.push("User: " + userInput.innerHTML);
@@ -193,14 +188,15 @@ async function mainCall(userValue) {
                 textGen({ "inputs": userValue, "parameters": { "return_full_text": false } }).then(async (response) => {
                     let aiContentValue = await contentFilterText(response[0].generated_text);
                     if (aiContentValue == 1) {
+                        submitButton.disabled = true; 
+                        frame.appendChild(userInput);
+                        frame.appendChild(aiOutput);
                         userInput.innerHTML = userValue;
                         let cutOff = stopAtLastPeriod(response[0].generated_text);
                         let noBlankLines = removeBlankLines(cutOff);
                         aiOutput.innerHTML = noBlankLines;
-                        frame.appendChild(userInput);
-                        frame.appendChild(aiOutput);
-                        bubbles.push(aiOutput);
-                        makeBubbleEvents(); 
+                        aiOutput.classList.add("custom-cursor");
+                        addBubbleEvent(aiOutput); 
                         frame.scrollTop = frame.scrollHeight;
                         resetPlaceholder();
                         records.push("User: " + userInput.innerHTML);
@@ -214,22 +210,25 @@ async function mainCall(userValue) {
             setPlaceholder(contentValue);
         }
     }
-    micButton.disabled = false; 
+    micButton.disabled = false;
+    submitButton.disabled = false; 
 }
 
 function codieStart() {
     const codieIntro = "Hello, my name is Codie. How can I assist you?";
-    const codieIntruction = "Start your sentence with 'generate me an image' or anything to just chat with me!";
-
-    const codieIntructionTag = document.createElement('div');
+    const codieInstruction = "Start your sentence with 'generate me an image' or anything to just chat with me!";
     codieIntroTag.classList.add('ai-bubble');
-    codieIntructionTag.classList.add('ai-bubble');
+    codieInstructionTag.classList.add('ai-bubble');
     codieIntroTag.textContent = codieIntro;
-    codieIntructionTag.textContent = codieIntruction;
+    codieInstructionTag.textContent = codieInstruction;
+    codieIntroTag.classList.add("custom-cursor");
+    codieInstructionTag.classList.add("custom-cursor");
+    addBubbleEvent(codieIntroTag);
+    addBubbleEvent(codieInstructionTag); 
     frame.appendChild(codieIntroTag);
-    frame.appendChild(codieIntructionTag);
+    frame.appendChild(codieInstructionTag);
     records.push("AI: " + codieIntro);
-    records.push("AI: " + codieIntruction);
+    records.push("AI: " + codieInstruction);
 }
 
 function setPlaceholder(cv) {

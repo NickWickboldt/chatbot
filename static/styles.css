@@ -398,12 +398,12 @@ i{
 
 .ai-bubble {
     text-align: left;
-    align-self: flex-end;
+    align-self: start;
     background-color: var(--AppleGreen);
 }
 
 .user-bubble {
-    align-self: start;
+    align-self: flex-end;
     text-align: left;
     background-color: var(--iCodeBlue);
 }
@@ -419,33 +419,50 @@ i{
     padding: .5vmin;
     border-radius: 10px;
     color: var(--smokeWhite);
+    display: flex;
+    vertical-align: middle;
+}
+
+.ai-bubble:hover{
+    filter: brightness(80%);
+}
+
+.custom-cursor {
+    cursor: url(asset/audio-icon.png), pointer;
+}
+
+.speakerIcon{
+    width: 3vmin;
+    height: 3vmin;
+    margin: 1vmin;
+    align-self: center;
 }
 
 .ai-bubble::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    transform: rotateZ(-35deg);
-    border-style: solid;
-    border-width: 4vmin 1vmin 0;
-    border-color: var(--AppleGreen) transparent transparent;
-    display: block;
-    width: 0;
-    right: -5px;
-    z-index: -1;
-}
-
-.user-bubble::after {
     content: '';
     position: absolute;
     bottom: -7px;
     transform: rotateZ(35deg);
     border-style: solid;
     border-width: 4vmin 1vmin 0;
-    border-color: var(--iCodeBlue) transparent transparent;
+    border-color: var(--AppleGreen) transparent transparent;
     display: block;
     width: 0;
     left: -2px;
+    z-index: -1;
+}
+
+.user-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    transform: rotateZ(-35deg);
+    border-style: solid;
+    border-width: 4vmin 1vmin 0;
+    border-color: var(--iCodeBlue) transparent transparent;
+    display: block;
+    width: 0;
+    right: -5px;
     z-index: -1;
 }
 
@@ -468,21 +485,21 @@ i{
 }
 
 .image-bubble{
-    align-self: end;
+    align-self: flex-start;
     background-color: var(--AppleGreen);
 }
 
 .image-bubble::after {
     content: '';
     position: absolute;
-    bottom: -6px;
-    transform: rotateZ(-35deg);
+    bottom: -7px;
+    transform: rotateZ(35deg);
     border-style: solid;
     border-width: 4vmin 1vmin 0;
     border-color: var(--AppleGreen) transparent transparent;
     display: block;
     width: 0;
-    right: -5px;
+    left: -2px;
     z-index: -1;
 }
 
