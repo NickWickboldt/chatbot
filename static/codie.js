@@ -99,7 +99,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
         chunks.push(event.data);
     };
     mediaRecorder.onstop = function () {
-        micButton.disabled = true;
+        micButton.disabled = false;
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
@@ -146,13 +146,12 @@ downloadButton.addEventListener('click', () => {
 
 submitButton.addEventListener('click', () => {
     submitEntry();
-    console.log("submitBTN")
+    submitButton.disabled = false; 
 })
 
 async function submitEntry() {
     const input = entry.value.toLowerCase().trim();
     mainCall(input);
-    console.log("submitENTRY")
 }
 
 async function mainCall(userValue) {
@@ -164,7 +163,6 @@ async function mainCall(userValue) {
         let contentValue = await contentFilterText(userValue);
         if (contentValue == 1) {
             if (checkImgPromt(userValue)) {
-                submitButton.disabled = true; 
                 userInput.innerHTML = userValue;
                 aiOutput.innerHTML = "Loading...";
                 frame.appendChild(userInput);
@@ -187,12 +185,10 @@ async function mainCall(userValue) {
                         records.push("Ai: " + aiOutput.innerHTML);
                     })
                 });
-                submitButton.disabled = false;
             } else {
                 textGen({ "inputs": userValue, "parameters": { "return_full_text": false } }).then(async (response) => {
                     let aiContentValue = await contentFilterText(response[0].generated_text);
                     if (aiContentValue == 1) {
-                        submitButton.disabled = true; 
                         frame.appendChild(userInput);
                         frame.appendChild(aiOutput);
                         userInput.innerHTML = userValue;
@@ -205,7 +201,6 @@ async function mainCall(userValue) {
                         resetPlaceholder();
                         records.push("User: " + userInput.innerHTML);
                         records.push("Ai: " + noBlankLines);
-                        submitButton.disabled = false;
                     } else {
                         setPlaceholder(aiContentValue);
                     }
@@ -215,8 +210,8 @@ async function mainCall(userValue) {
             setPlaceholder(contentValue);
         }
     }
-
-    micButton.disabled = false; 
+    submitButton.disabled = true;
+    micButton.disabled = true; 
     console.log("btn")
 }
 
