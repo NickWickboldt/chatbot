@@ -212,7 +212,6 @@ async function mainCall(userValue) {
     }
     submitButton.disabled = true;
     micButton.disabled = true; 
-    console.log("btn")
 }
 
 function codieStart() {
