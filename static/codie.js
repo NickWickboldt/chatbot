@@ -62,7 +62,7 @@ fileReader.onload = function (event) {
 //could use Gemma
 async function textGen(data) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
+        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
         {
             headers: {
                 Authorization: `Bearer ${hugging_face_key}`,
@@ -99,7 +99,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
         chunks.push(event.data);
     };
     mediaRecorder.onstop = function () {
-        micButton.disabled = false;
+        micButton.disabled = true;
         const blob = new Blob(chunks, { 'type': 'audio/ogg; codecs=opus' });
         audioToText(blob).then(async (response) => {
             const userAudio = response.text.toLowerCase();
@@ -146,7 +146,7 @@ downloadButton.addEventListener('click', () => {
 
 submitButton.addEventListener('click', () => {
     submitEntry();
-    submitButton.disabled = false; 
+    submitButton.disabled = true; 
 })
 
 async function submitEntry() {
@@ -183,6 +183,8 @@ async function mainCall(userValue) {
                         records.push("User: " + userInput.innerHTML);
                         records.push(img.src);
                         records.push("Ai: " + aiOutput.innerHTML);
+                        submitButton.disabled = false;
+                        micButton.disabled = false; 
                     })
                 });
             } else {
@@ -201,8 +203,12 @@ async function mainCall(userValue) {
                         resetPlaceholder();
                         records.push("User: " + userInput.innerHTML);
                         records.push("Ai: " + noBlankLines);
+                        submitButton.disabled = false;
+                        micButton.disabled = false; 
                     } else {
                         setPlaceholder(aiContentValue);
+                        submitButton.disabled = false;
+                        micButton.disabled = false; 
                     }
                 });
             }
@@ -210,8 +216,6 @@ async function mainCall(userValue) {
             setPlaceholder(contentValue);
         }
     }
-    submitButton.disabled = true;
-    micButton.disabled = true; 
 }
 
 function codieStart() {
