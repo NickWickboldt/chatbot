@@ -145,8 +145,9 @@ downloadButton.addEventListener('click', () => {
 })
 
 submitButton.addEventListener('click', () => {
-    submitEntry();
     submitButton.disabled = true; 
+    submitEntry();
+    submitButton.disabled = false; 
 })
 
 async function submitEntry() {
@@ -183,8 +184,6 @@ async function mainCall(userValue) {
                         records.push("User: " + userInput.innerHTML);
                         records.push(img.src);
                         records.push("Ai: " + aiOutput.innerHTML);
-                        submitButton.disabled = false;
-                        micButton.disabled = false; 
                     })
                 });
             } else {
@@ -210,12 +209,14 @@ async function mainCall(userValue) {
                         submitButton.disabled = false;
                         micButton.disabled = false; 
                     }
-                });
+                });               
             }
         } else {
             setPlaceholder(contentValue);
         }
     }
+    submitButton.disabled = true;
+    micButton.disabled = true; 
 }
 
 function codieStart() {
