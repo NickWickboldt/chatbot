@@ -1,4 +1,5 @@
 import { contentFilterText, stopAtLastPeriod, removeBlankLines } from "./content-filter.js";
+import { hugging_face_key } from "./keys.js";
 
 const submitButton = document.querySelector(".submit-btn");
 const entry = document.querySelector(".image-gen-entry");
@@ -14,7 +15,7 @@ async function query(data) {
         "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
         {
             headers: {
-                Authorization: "Bearer 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",
+                Authorization: `Bearer ${hugging_face_key}`,
                 "Content-Type": "application/json"
             },
             method: "POST",

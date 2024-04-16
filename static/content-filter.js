@@ -1,4 +1,4 @@
-const cloudinaryCloudname = "dmm8zr0az"
+import { cloudinaryCloudname, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys";
 
 export let downloadableLink = null;
 
@@ -8,8 +8,8 @@ export async function contentFilterText(textInput){
   data.append('lang', 'en');
   data.append('opt_countries', 'us,gb,fr');
   data.append('mode', 'rules');
-  data.append('api_user', '491630136');
-  data.append('api_secret', 'C4MoxqQPspV7jVvMv728pcy2sTpjDe9A');
+  data.append('api_user', sightengine_api_user);
+  data.append('api_secret', sightengine_api_secret);
 
   try {
     const response = await axios({
@@ -19,7 +19,7 @@ export async function contentFilterText(textInput){
     });
 
     if (response.data.profanity.matches.length > 0) {
-        return 0; // profanity
+        return 0;
     } else {
         return 1; 
     }
@@ -85,9 +85,9 @@ export async function filterImage(url){
    let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
     params: {
       'url': url,
-      'workflow': 'wfl_g5fdiHz4maLRX7ezhd867',
-      'api_user': '491630136',
-      'api_secret': 'C4MoxqQPspV7jVvMv728pcy2sTpjDe9A',
+      'workflow': sightengine_workflow,
+      'api_user': sightengine_api_user,
+      'api_secret': sightengine_api_secret,
     }
   })
   return response; 
@@ -114,16 +114,3 @@ export function removeBlankLines(str){
   }
   return temp; 
 }
-
-/*
-Getting through:
-XXX
-incest
-kink
-prostitute
-onlyfans
-firearm
-gun
-shooting
-kill
-*/

@@ -1,4 +1,5 @@
-import {contentFilterText, toBase64, uploadFile, filterImage, downloadableLink} from "./content-filter.js";
+import {contentFilterText, toBase64, uploadFile, downloadableLink} from "./content-filter.js";
+import { hugging_face_key } from "./keys.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const downloadButton = document.querySelector(".download-btn");
@@ -14,7 +15,7 @@ async function query(data) {
 		"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
 		{
 			headers: { 
-        Authorization: "Bearer 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", 
+        Authorization: `Bearer ${hugging_face_key}`, 
         "Content-Type": "application/json"
       },
 			method: "POST",

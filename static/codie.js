@@ -1,4 +1,5 @@
 import { contentFilterText, stopAtLastPeriod, removeBlankLines, toBase64, uploadFile } from "./content-filter.js";
+import { elevenlabs_api_key, hugging_face_key } from "./keys.js";
 
 const micButton = document.querySelector('.mic-btn');
 const entry = document.querySelector(".image-gen-entry");
@@ -21,7 +22,7 @@ function addBubbleEvent(bubble){
         const options = {
             method: 'POST',
             headers: {
-                'xi-api-key': '6b198811761454a818ba50ecd87894e6',
+                'xi-api-key': elevenlabs_api_key,
                 'Content-Type': 'application/json'
             },
             body: `{"text": "${bubble.innerHTML.trim()}"}`,
@@ -45,7 +46,7 @@ async function audioToText(filename) {
     const response = await fetch(
         "https://api-inference.huggingface.co/models/openai/whisper-large-v3",
         {
-            headers: { Authorization: "Bearer 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" },
+            headers: { Authorization: `Bearer ${hugging_face_key}` },
             method: "POST",
             body: data,
         }
@@ -64,7 +65,7 @@ async function textGen(data) {
         "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
         {
             headers: {
-                Authorization: "Bearer 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",
+                Authorization: `Bearer ${hugging_face_key}`,
                 "Content-Type": "application/json"
             },
             method: "POST",
@@ -80,7 +81,7 @@ async function imageGen(data) {
         "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
         {
             headers: {
-                Authorization: "Bearer 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",
+                Authorization: `Bearer ${hugging_face_key}`,
                 "Content-Type": "application/json"
             },
             method: "POST",
