@@ -96,6 +96,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
     mediaRecorder = new MediaRecorder(stream);
     let chunks = [];
     mediaRecorder.ondataavailable = function (event) {
+        chunks = [];
         chunks.push(event.data);
     };
     mediaRecorder.onstop = function () {
