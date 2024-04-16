@@ -8,8 +8,8 @@ export async function contentFilterText(textInput){
   data.append('lang', 'en');
   data.append('opt_countries', 'us,gb,fr');
   data.append('mode', 'rules');
-  data.append('api_user', '1820253693');
-  data.append('api_secret', 'Yc42azkarSBjGDhqiAHkZNEojyQfB7tm');
+  data.append('api_user', '491630136');
+  data.append('api_secret', 'C4MoxqQPspV7jVvMv728pcy2sTpjDe9A');
 
   try {
     const response = await axios({
@@ -85,9 +85,9 @@ export async function filterImage(url){
    let response = await axios.get('https://api.sightengine.com/1.0/check-workflow.json', {
     params: {
       'url': url,
-      'workflow': 'wfl_fYMYmqaTT4Hcbfo8SKWRi',
-      'api_user': '1820253693',
-      'api_secret': 'Yc42azkarSBjGDhqiAHkZNEojyQfB7tm',
+      'workflow': 'wfl_g5fdiHz4maLRX7ezhd867',
+      'api_user': '491630136',
+      'api_secret': 'C4MoxqQPspV7jVvMv728pcy2sTpjDe9A',
     }
   })
   return response; 

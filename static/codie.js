@@ -145,11 +145,13 @@ downloadButton.addEventListener('click', () => {
 
 submitButton.addEventListener('click', () => {
     submitEntry();
+    console.log("submitBTN")
 })
 
 async function submitEntry() {
     const input = entry.value.toLowerCase().trim();
     mainCall(input);
+    console.log("submitENTRY")
 }
 
 async function mainCall(userValue) {
@@ -184,6 +186,7 @@ async function mainCall(userValue) {
                         records.push("Ai: " + aiOutput.innerHTML);
                     })
                 });
+                submitButton.disabled = false;
             } else {
                 textGen({ "inputs": userValue, "parameters": { "return_full_text": false } }).then(async (response) => {
                     let aiContentValue = await contentFilterText(response[0].generated_text);
@@ -201,6 +204,7 @@ async function mainCall(userValue) {
                         resetPlaceholder();
                         records.push("User: " + userInput.innerHTML);
                         records.push("Ai: " + noBlankLines);
+                        submitButton.disabled = false;
                     } else {
                         setPlaceholder(aiContentValue);
                     }
@@ -210,8 +214,9 @@ async function mainCall(userValue) {
             setPlaceholder(contentValue);
         }
     }
-    micButton.disabled = false;
-    submitButton.disabled = false; 
+
+    micButton.disabled = false; 
+    console.log("btn")
 }
 
 function codieStart() {
