@@ -1,4 +1,4 @@
-import { cloudinaryCloudname, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys";
+import { cloudinaryCloudname, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys.js";
 
 export let downloadableLink = null;
 
