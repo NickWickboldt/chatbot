@@ -1,4 +1,4 @@
-import { cloudinaryCloudname, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys.js";
+import { cloudinaryCloudname,sightengine_listID, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys.js";
 
 export let downloadableLink = null;
 
@@ -8,8 +8,10 @@ export async function contentFilterText(textInput){
   data.append('lang', 'en');
   data.append('opt_countries', 'us,gb,fr');
   data.append('mode', 'rules');
+  data.append('list', sightengine_listID);
   data.append('api_user', sightengine_api_user);
   data.append('api_secret', sightengine_api_secret);
+
 
   try {
     const response = await axios({
@@ -18,7 +20,7 @@ export async function contentFilterText(textInput){
         data: data
     });
 
-    if (response.data.profanity.matches.length > 0) {
+    if (response.data.profanity.matches.length > 0 || response.data.blacklist.matches.length > 0) {
         return 0;
     } else {
         return 1; 
@@ -88,6 +90,7 @@ export async function filterImage(url){
       'workflow': sightengine_workflow,
       'api_user': sightengine_api_user,
       'api_secret': sightengine_api_secret,
+      'list': sightengine_listID
     }
   })
   return response; 
