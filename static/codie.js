@@ -1,5 +1,4 @@
 import { contentFilterText, stopAtLastPeriod, removeBlankLines, toBase64, uploadFile } from "./content-filter.js";
-import { elevenlabs_api_key, hugging_face_key } from "./keys.js";
 
 const micButton = document.querySelector('.mic-btn');
 const entry = document.querySelector(".image-gen-entry");
@@ -15,6 +14,20 @@ const imgPromtString = [
 ]
 const records = [];
 let mediaRecorder;
+
+let elevenlabs_api_key; 
+let hugging_face_key; 
+
+fetch('/env')
+    .then(response => response.json())
+    .then(data => {
+        hugging_face_key= data.hugging_face_key;
+        elevenlabs_api_key = data.elevenlabs_api_key; 
+    })
+    .catch(error => {
+        console.error('Error fetching environment variables:', error);
+    });
+
 codieStart();
 
 function addBubbleEvent(bubble){

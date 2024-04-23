@@ -1,5 +1,4 @@
 import {contentFilterText, toBase64, uploadFile, downloadableLink} from "./content-filter.js";
-import { hugging_face_key } from "./keys.js";
 
 const submitButton = document.querySelector(".submit-btn"); 
 const downloadButton = document.querySelector(".download-btn");
@@ -8,7 +7,18 @@ const imageFrame = document.querySelector(".image-frame");
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
 
+let hugging_face_key; 
+
 export let inputDisplay;
+
+fetch('/env')
+    .then(response => response.json())
+    .then(data => {
+        hugging_face_key= data.hugging_face_key;
+    })
+    .catch(error => {
+        console.error('Error fetching environment variables:', error);
+    });
 
 async function query(data) {
 	const response = await fetch(

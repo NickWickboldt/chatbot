@@ -1,6 +1,19 @@
-import { cloudinaryCloudname,sightengine_listID, sightengine_api_user, sightengine_api_secret, sightengine_workflow } from "./keys.js";
-
 export let downloadableLink = null;
+
+let cloudinaryCloudname, sightengine_listID, sightengine_api_user, sightengine_api_secret, sightengine_workflow; 
+
+fetch('/env')
+    .then(response => response.json())
+    .then(data => {
+        cloudinaryCloudname= data.cloudinaryCloudname;
+        sightengine_listID = data.sightengine_listID; 
+        sightengine_api_user = data.sightengine_api_user; 
+        sightengine_api_secret = data.sightengine_api_secret; 
+        sightengine_workflow = data.sightengine_workflow; 
+    })
+    .catch(error => {
+        console.error('Error fetching environment variables:', error);
+    });
 
 export async function contentFilterText(textInput){
   let data = new FormData();

@@ -1,5 +1,4 @@
 import { contentFilterText, stopAtLastPeriod, removeBlankLines } from "./content-filter.js";
-import { hugging_face_key } from "./keys.js";
 
 const submitButton = document.querySelector(".submit-btn");
 const entry = document.querySelector(".image-gen-entry");
@@ -7,12 +6,23 @@ const textFrame = document.querySelector(".text-frame");
 const downloadButton = document.querySelector(".download-btn");
 const downloadableLink = document.querySelector(".download-link");
 
+let hugging_face_key; 
+
 let records = [];
+
+fetch('/env')
+    .then(response => response.json())
+    .then(data => {
+        hugging_face_key= data.hugging_face_key;
+    })
+    .catch(error => {
+        console.error('Error fetching environment variables:', error);
+    });
 
 async function query(data) {
     const response = await fetch(
         //https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it Gemma
-        "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2",
+        "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
         {
             headers: {
                 Authorization: `Bearer ${hugging_face_key}`,
