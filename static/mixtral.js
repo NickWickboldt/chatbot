@@ -20,20 +20,28 @@ fetch('/env')
     });
 
 async function query(data) {
-    const response = await fetch(
-        //https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it Gemma
-        "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
-        {
-            headers: {
-                Authorization: `Bearer ${hugging_face_key}`,
-                "Content-Type": "application/json"
+  const response = await fetch(
+    "https://router.huggingface.co/featherless-ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${hugging_face_key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [
+            {
+                role: "user",
+                content: `${data.inputs}`,
             },
-            method: "POST",
-            body: JSON.stringify(data),
-        }
-    );
-    const result = await response.json();
-    return result;
+        ],
+        model: 'mistralai/Mistral-7B-Instruct-v0.2',
+        stream: false,
+      }),
+    }
+  );
+
+  const result = await response.json();
+  return [{"generated_text": result.choices[0].message.content}];
 }
 
 downloadButton.addEventListener('click', () => {

@@ -22,18 +22,26 @@ fetch('/env')
 
 async function query(data) {
 	const response = await fetch(
-		"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-		{
-			headers: { 
+    "https://router.huggingface.co/nebius/v1/images/generations", {
+      method: "POST",
+      headers: {
         Authorization: `Bearer ${hugging_face_key}`, 
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-			method: "POST",
-			body: JSON.stringify(data),
-		}
-	);
-	const result = await response.blob();
-	return result;
+
+      body: JSON.stringify({
+        prompt: `${data.inputs}`,
+        response_format: "b64_json",
+        model: "stability-ai/sdxl",
+      }),
+    }
+  );
+	const jsonResponse = await response.json();
+	console.log(jsonResponse)
+	const base64String = jsonResponse.data[0].b64_json; 
+	const mimeType = 'image/png'; 
+  const base64DataUri = `data:${mimeType};base64,${base64String}`;
+	return base64DataUri;
 }
 
 downloadButton.addEventListener('click', () => {
@@ -63,8 +71,9 @@ async function submitClicked(){
 			img.src = "../../static/asset/image-loading.gif"; 
 			imageFrame.appendChild(img); 
 			query({"inputs": input}).then(async (response) => {
-				let base64 = await toBase64(response)
-				uploadFile(base64).then((url) => {
+				// let base64 = await toBase64(response)
+				uploadFile(response).then((url) => {
+					console.log(url)
 					img.classList.remove('image-frame-loading'); 
 					img.classList.add('image-frame-image'); 
 					img.src = url;
