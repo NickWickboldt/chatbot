@@ -54,16 +54,26 @@ function addBubbleEvent(bubble){
 }
 
 async function audioToText(filename) {
-    fileReader.readAsArrayBuffer(filename);
     const data = filename;
+
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/openai/whisper-large-v3",
+        "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3",
         {
-            headers: { Authorization: `Bearer ${hugging_face_key}` },
+            headers: {
+                Authorization: `Bearer ${hugging_face_key}`,
+                'Content-Type': 'audio/ogg'
+            },
             method: "POST",
             body: data,
         }
     );
+    console.log(response);
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+    }
+
     const result = await response.json();
     return result;
 }
@@ -75,34 +85,51 @@ fileReader.onload = function (event) {
 //could use Gemma
 async function textGen(data) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/google/gemma-1.1-7b-it",
-        {
-            headers: {
-                Authorization: `Bearer ${hugging_face_key}`,
-                "Content-Type": "application/json"
+    "https://router.huggingface.co/featherless-ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${hugging_face_key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [
+            {
+                role: "user",
+                content: `${data.inputs}`,
             },
-            method: "POST",
-            body: JSON.stringify(data),
-        }
-    );
-    const result = await response.json();
-    return result;
+        ],
+        model: 'mistralai/Mistral-7B-Instruct-v0.2',
+        stream: false,
+      }),
+    }
+  );
+
+  const result = await response.json();
+  return [{"generated_text": result.choices[0].message.content}];
 }
 
 async function imageGen(data) {
     const response = await fetch(
-        "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
-        {
-            headers: {
-                Authorization: `Bearer ${hugging_face_key}`,
-                "Content-Type": "application/json"
-            },
-            method: "POST",
-            body: JSON.stringify(data),
-        }
-    );
-    const result = await response.blob();
-    return result;
+    "https://router.huggingface.co/nebius/v1/images/generations", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${hugging_face_key}`, 
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        prompt: `${data.inputs}`,
+        response_format: "b64_json",
+        model: "stability-ai/sdxl",
+      }),
+    }
+  );
+	const jsonResponse = await response.json();
+	console.log(jsonResponse)
+	const base64String = jsonResponse.data[0].b64_json; 
+	const mimeType = 'image/png'; 
+  	const base64DataUri = `data:${mimeType};base64,${base64String}`;
+	return base64DataUri;
 }
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
@@ -184,8 +211,8 @@ async function mainCall(userValue) {
                 const imgCon = document.createElement('div');
                 const img = document.createElement('img');
                 imageGen({ "inputs": userValue }).then(async (response) => {
-                    let base64 = await toBase64(response)
-                    uploadFile(base64).then((url) => {
+                    // let base64 = await toBase64(response)
+                    uploadFile(response).then((url) => {
                         img.src = url;
                         img.classList.add('image-generated-codie');
                         imgCon.classList.add('image-bubble');

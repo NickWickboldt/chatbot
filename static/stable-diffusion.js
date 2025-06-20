@@ -40,7 +40,7 @@ async function query(data) {
 	console.log(jsonResponse)
 	const base64String = jsonResponse.data[0].b64_json; 
 	const mimeType = 'image/png'; 
-  const base64DataUri = `data:${mimeType};base64,${base64String}`;
+  	const base64DataUri = `data:${mimeType};base64,${base64String}`;
 	return base64DataUri;
 }
 
