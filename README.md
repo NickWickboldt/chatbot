@@ -1,2 +1,2 @@
 # Development Deployment
-https://roan-thrilling-pajama.glitch.me/
+https://ai-camp-example-project.onrender.com
