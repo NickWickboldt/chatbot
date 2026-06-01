@@ -7,14 +7,14 @@ const imageFrame = document.querySelector(".image-frame");
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
 
-let hugging_face_key; 
+let gemini_api_key; 
 
 export let inputDisplay;
 
 fetch('/env')
     .then(response => response.json())
     .then(data => {
-        hugging_face_key= data.hugging_face_key;
+        gemini_api_key= data.gemini_api_key;
     })
     .catch(error => {
         console.error('Error fetching environment variables:', error);
@@ -22,25 +22,23 @@ fetch('/env')
 
 async function query(data) {
 	const response = await fetch(
-    "https://router.huggingface.co/nebius/v1/images/generations", {
+    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${hugging_face_key}`, 
+        "x-goog-api-key": gemini_api_key,
         "Content-Type": "application/json",
       },
 
       body: JSON.stringify({
-        prompt: `${data.inputs}`,
-        response_format: "b64_json",
-        model: "stability-ai/sdxl",
+        contents: [{ parts: [{ text: `${data.inputs}` }] }]
       }),
     }
   );
 	const jsonResponse = await response.json();
 	console.log(jsonResponse)
-	const base64String = jsonResponse.data[0].b64_json; 
-	const mimeType = 'image/png'; 
-  	const base64DataUri = `data:${mimeType};base64,${base64String}`;
+	const imagePart = jsonResponse.candidates[0].content.parts.find(p => p.inlineData);
+	const mimeType = imagePart.inlineData.mimeType; 
+  	const base64DataUri = `data:${mimeType};base64,${imagePart.inlineData.data}`;
 	return base64DataUri;
 }
 

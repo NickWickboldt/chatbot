@@ -6,14 +6,14 @@ const textFrame = document.querySelector(".text-frame");
 const downloadButton = document.querySelector(".download-btn");
 const downloadableLink = document.querySelector(".download-link");
 
-let hugging_face_key; 
+let gemini_api_key; 
 
 let records = [];
 
 fetch('/env')
     .then(response => response.json())
     .then(data => {
-        hugging_face_key= data.hugging_face_key;
+        gemini_api_key= data.gemini_api_key;
     })
     .catch(error => {
         console.error('Error fetching environment variables:', error);
@@ -21,27 +21,20 @@ fetch('/env')
 
 async function query(data) {
   const response = await fetch(
-    "https://router.huggingface.co/featherless-ai/v1/chat/completions", {
+    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-lite:generateContent", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${hugging_face_key}`,
+        "x-goog-api-key": gemini_api_key,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [
-            {
-                role: "user",
-                content: `${data.inputs}`,
-            },
-        ],
-        model: 'mistralai/Mistral-7B-Instruct-v0.2',
-        stream: false,
+        contents: [{ parts: [{ text: `${data.inputs}` }] }]
       }),
     }
   );
 
   const result = await response.json();
-  return [{"generated_text": result.choices[0].message.content}];
+  return [{"generated_text": result.candidates[0].content.parts[0].text}];
 }
 
 downloadButton.addEventListener('click', () => {

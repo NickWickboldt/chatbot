@@ -16,12 +16,12 @@ const records = [];
 let mediaRecorder;
 
 let elevenlabs_api_key; 
-let hugging_face_key; 
+let gemini_api_key; 
 
 fetch('/env')
     .then(response => response.json())
     .then(data => {
-        hugging_face_key= data.hugging_face_key;
+        gemini_api_key= data.gemini_api_key;
         elevenlabs_api_key = data.elevenlabs_api_key; 
     })
     .catch(error => {
@@ -41,7 +41,7 @@ function addBubbleEvent(bubble){
             body: `{"text": "${bubble.innerHTML.trim()}"}`,
             type: "arrayBuffer"
         };
-        fetch('https://api.elevenlabs.io/v1/text-to-speech/vzIvYzEA9hRE16PpL5jb', options)
+        fetch('https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128', options)
             .then(async (response) => {
                 const arrayBuffer = await response.arrayBuffer();
                 const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
@@ -54,17 +54,27 @@ function addBubbleEvent(bubble){
 }
 
 async function audioToText(filename) {
-    const data = filename;
+    const base64Audio = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = reject;
+        reader.readAsDataURL(filename);
+    });
 
     const response = await fetch(
-        "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3",
+        "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-lite:generateContent",
         {
             headers: {
-                Authorization: `Bearer ${hugging_face_key}`,
-                'Content-Type': 'audio/ogg'
+                "x-goog-api-key": gemini_api_key,
+                "Content-Type": "application/json",
             },
             method: "POST",
-            body: data,
+            body: JSON.stringify({
+                contents: [{ parts: [
+                    { text: "Transcribe this audio" },
+                    { inlineData: { mimeType: "audio/ogg", data: base64Audio } }
+                ]}]
+            }),
         }
     );
     console.log(response);
@@ -75,7 +85,7 @@ async function audioToText(filename) {
     }
 
     const result = await response.json();
-    return result;
+    return { text: result.candidates[0].content.parts[0].text };
 }
 
 fileReader.onload = function (event) {
@@ -85,50 +95,41 @@ fileReader.onload = function (event) {
 //could use Gemma
 async function textGen(data) {
     const response = await fetch(
-    "https://router.huggingface.co/featherless-ai/v1/chat/completions", {
+    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-lite:generateContent", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${hugging_face_key}`,
+        "x-goog-api-key": gemini_api_key,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [
-            {
-                role: "user",
-                content: `${data.inputs}`,
-            },
-        ],
-        model: 'mistralai/Mistral-7B-Instruct-v0.2',
-        stream: false,
+        contents: [{ parts: [{ text: `${data.inputs}` }] }]
       }),
     }
   );
 
   const result = await response.json();
-  return [{"generated_text": result.choices[0].message.content}];
+  return [{"generated_text": result.candidates[0].content.parts[0].text}];
 }
 
 async function imageGen(data) {
     const response = await fetch(
-    "https://router.huggingface.co/nebius/v1/images/generations", {
+    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${hugging_face_key}`, 
+        "x-goog-api-key": gemini_api_key,
         "Content-Type": "application/json",
       },
 
       body: JSON.stringify({
-        prompt: `${data.inputs}`,
-        response_format: "b64_json",
-        model: "stability-ai/sdxl",
+        contents: [{ parts: [{ text: `${data.inputs}` }] }]
       }),
     }
   );
 	const jsonResponse = await response.json();
 	console.log(jsonResponse)
-	const base64String = jsonResponse.data[0].b64_json; 
-	const mimeType = 'image/png'; 
-  	const base64DataUri = `data:${mimeType};base64,${base64String}`;
+	const imagePart = jsonResponse.candidates[0].content.parts.find(p => p.inlineData);
+	const mimeType = imagePart.inlineData.mimeType; 
+  	const base64DataUri = `data:${mimeType};base64,${imagePart.inlineData.data}`;
 	return base64DataUri;
 }
 
