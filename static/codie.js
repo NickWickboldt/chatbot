@@ -16,12 +16,12 @@ const records = [];
 let mediaRecorder;
 
 let elevenlabs_api_key; 
-let gemini_api_key; 
+let hugging_face_key; 
 
 fetch('/env')
     .then(response => response.json())
     .then(data => {
-        gemini_api_key= data.gemini_api_key;
+        hugging_face_key= data.hugging_face_key;
         elevenlabs_api_key = data.elevenlabs_api_key; 
     })
     .catch(error => {
@@ -34,14 +34,15 @@ function addBubbleEvent(bubble){
     bubble.addEventListener('click', () => {
         const options = {
             method: 'POST',
-            headers: {
+            headers:{
                 'xi-api-key': elevenlabs_api_key,
                 'Content-Type': 'application/json'
             },
             body: `{"text": "${bubble.innerHTML.trim()}"}`,
             type: "arrayBuffer"
-        };
-        fetch('https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb?output_format=mp3_44100_128', options)
+        }
+        
+        fetch('https://api.elevenlabs.io/v1/text-to-speech/JBFqnCBsd6RMkjVDRZzb', options)
             .then(async (response) => {
                 const arrayBuffer = await response.arrayBuffer();
                 const blob = new Blob([arrayBuffer], { type: 'audio/wav' });
@@ -49,32 +50,21 @@ function addBubbleEvent(bubble){
                 const audioElement = new Audio(audioUrl);
                 audioElement.play();
             })
-            .catch(err => console.error(err));
-    });
+    })
 }
 
 async function audioToText(filename) {
-    const base64Audio = await new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = reject;
-        reader.readAsDataURL(filename);
-    });
+    const data = filename;
 
     const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-lite:generateContent",
+        "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3",
         {
             headers: {
-                "x-goog-api-key": gemini_api_key,
-                "Content-Type": "application/json",
+                Authorization: `Bearer ${hugging_face_key}`,
+                'Content-Type': 'audio/ogg'
             },
             method: "POST",
-            body: JSON.stringify({
-                contents: [{ parts: [
-                    { text: "Transcribe this audio" },
-                    { inlineData: { mimeType: "audio/ogg", data: base64Audio } }
-                ]}]
-            }),
+            body: data,
         }
     );
     console.log(response);
@@ -85,7 +75,7 @@ async function audioToText(filename) {
     }
 
     const result = await response.json();
-    return { text: result.candidates[0].content.parts[0].text };
+    return result;
 }
 
 fileReader.onload = function (event) {
@@ -95,42 +85,44 @@ fileReader.onload = function (event) {
 //could use Gemma
 async function textGen(data) {
     const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-lite:generateContent", {
+    "https://router.huggingface.co/v1/chat/completions", {
       method: "POST",
       headers: {
-        "x-goog-api-key": gemini_api_key,
+        "Authorization": `Bearer ${hugging_face_key}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: `${data.inputs}` }] }]
+        messages: [
+            {
+                role: "user",
+                content: `${data.inputs}`,
+            },
+        ],
+        model: 'mistralai/Mistral-7B-Instruct-v0.2:featherless-ai',
+        stream: false,
       }),
     }
   );
 
   const result = await response.json();
-  return [{"generated_text": result.candidates[0].content.parts[0].text}];
+  return [{"generated_text": result.choices[0].message.content}];
 }
 
 async function imageGen(data) {
     const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent", {
+		"https://router.huggingface.co/fal-ai/fal-ai/fast-sdxl", {
       method: "POST",
       headers: {
-        "x-goog-api-key": gemini_api_key,
+        Authorization: `Bearer ${hugging_face_key}`, 
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `${data.inputs}` }] }]
-      }),
+      body: JSON.stringify(data),
     }
   );
 	const jsonResponse = await response.json();
 	console.log(jsonResponse)
-	const imagePart = jsonResponse.candidates[0].content.parts.find(p => p.inlineData);
-	const mimeType = imagePart.inlineData.mimeType; 
-  	const base64DataUri = `data:${mimeType};base64,${imagePart.inlineData.data}`;
-	return base64DataUri;
+	return jsonResponse.images[0].url;
 }
 
 navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
@@ -211,7 +203,7 @@ async function mainCall(userValue) {
                 frame.appendChild(aiOutput);
                 const imgCon = document.createElement('div');
                 const img = document.createElement('img');
-                imageGen({ "inputs": userValue }).then(async (response) => {
+                imageGen({ "prompt": userValue }).then(async (response) => {
                     // let base64 = await toBase64(response)
                     uploadFile(response).then((url) => {
                         img.src = url;

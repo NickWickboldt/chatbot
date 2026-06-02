@@ -26,7 +26,6 @@ def codie():
 def get_env():
     return jsonify({
         'hugging_face_key': os.getenv('hugging_face_key'),
-        'gemini_api_key': os.getenv('gemini_api_key'),
         'cloudinaryCloudname': os.getenv('cloudinaryCloudname'),
         'sightengine_api_user': os.getenv('sightengine_api_user'),
         'sightengine_api_secret': os.getenv('sightengine_api_secret'),

@@ -7,14 +7,14 @@ const imageFrame = document.querySelector(".image-frame");
 const entry = document.querySelector(".image-gen-entry");
 const displayH1 = document.createElement('h1'); 
 
-let gemini_api_key; 
+let hugging_face_key; 
 
 export let inputDisplay;
 
 fetch('/env')
     .then(response => response.json())
     .then(data => {
-        gemini_api_key= data.gemini_api_key;
+        hugging_face_key= data.hugging_face_key;
     })
     .catch(error => {
         console.error('Error fetching environment variables:', error);
@@ -22,24 +22,19 @@ fetch('/env')
 
 async function query(data) {
 	const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1/models/gemini-3.1-flash-image:generateContent", {
+		"https://router.huggingface.co/fal-ai/fal-ai/fast-sdxl", {
       method: "POST",
       headers: {
-        "x-goog-api-key": gemini_api_key,
+        Authorization: `Bearer ${hugging_face_key}`, 
         "Content-Type": "application/json",
       },
 
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `${data.inputs}` }] }]
-      }),
+      body: JSON.stringify(data),
     }
   );
 	const jsonResponse = await response.json();
 	console.log(jsonResponse)
-	const imagePart = jsonResponse.candidates[0].content.parts.find(p => p.inlineData);
-	const mimeType = imagePart.inlineData.mimeType; 
-  	const base64DataUri = `data:${mimeType};base64,${imagePart.inlineData.data}`;
-	return base64DataUri;
+	return jsonResponse.images[0].url;
 }
 
 downloadButton.addEventListener('click', () => {
@@ -68,7 +63,7 @@ async function submitClicked(){
 			img.classList.add('image-frame-loading'); 
 			img.src = "../../static/asset/image-loading.gif"; 
 			imageFrame.appendChild(img); 
-			query({"inputs": input}).then(async (response) => {
+			query({"prompt": input}).then(async (response) => {
 				// let base64 = await toBase64(response)
 				uploadFile(response).then((url) => {
 					console.log(url)
